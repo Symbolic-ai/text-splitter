@@ -2,7 +2,7 @@
 members = ["bindings/*"]
 
 [workspace.package]
-version = "0.27.0"
+version = "0.28.0"
 authors = ["Ben Brandt <benjamin.j.brandt@gmail.com>"]
 edition = "2021"
 description = "Split text into semantic chunks, up to a desired chunk size. Supports calculating length by characters and tokens, and is callable from Rust and Python."
@@ -60,18 +60,18 @@ rustdoc-args = ["--cfg", "docsrs"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-ahash = "0.8.7"
+ahash = "0.8.12"
 auto_enums = "0.8"
 either = "1.15"
-icu_provider = { version = "2.0.0", features = ["sync"] }
-icu_segmenter = "2.0.0"
+icu_provider = { version = "2", features = ["sync"] }
+icu_segmenter = "2"
 itertools = "0.14"
-memchr = "2.7.5"
+memchr = "2.7.6"
 pulldown-cmark = { version = "0.13", default-features = false, optional = true }
 strum = { version = "0.27", features = ["derive"] }
-thiserror = "2.0.12"
+thiserror = "2.0.17"
 tiktoken-rs = { version = "0.7", optional = true }
-tokenizers = { version = "0.21", default-features = false, optional = true }
+tokenizers = { version = "0.22", default-features = false, optional = true }
 bpe-openai = { version = "0.3", optional = true }
 tree-sitter = { version = "0.25", optional = true }
 
@@ -81,8 +81,8 @@ divan = "0.1.21"
 fake = "4"
 insta = { version = "1.43", features = ["glob", "yaml"] }
 more-asserts = "0.3"
-rayon = "1.10"
-tokenizers = { version = "0.21", default-features = false, features = [
+rayon = "1.11"
+tokenizers = { version = "0.22", default-features = false, features = [
     "onig",
     "http",
 ] }

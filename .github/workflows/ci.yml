@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - "docs/**"
   pull_request:
     branches:
       - main
@@ -28,11 +26,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921
         with:
           toolchain: stable
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
 
       - name: Run cargo test
         run: cargo test --workspace --all-features
@@ -41,18 +39,18 @@ jobs:
     runs-on: ubuntu-latest
     name: Test Coverage
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921
         with:
           toolchain: stable
           components: llvm-tools-preview
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
-      - uses: taiki-e/install-action@a2e9aff0dd6be615d6b832e1f2b409d7c7d1d8c2
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
+      - uses: taiki-e/install-action@ebb229c6baa68383264f2822689b07b4916d9177
         with:
           tool: cargo-llvm-cov
       - run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@13ce06bfc6bbe3ecf90edbbf1bc32fe5978ca1d3
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
@@ -62,11 +60,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921
         with:
           toolchain: stable
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
 
       - name: Run cargo test
         run: cargo test --benches --workspace --all-features
@@ -75,17 +73,17 @@ jobs:
     name: Lints
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921
         with:
           toolchain: stable
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
 
       - run: cargo fmt -- --check
       - run: cargo clippy --workspace --all-features --all-targets
 
-      - uses: taiki-e/install-action@a2e9aff0dd6be615d6b832e1f2b409d7c7d1d8c2
+      - uses: taiki-e/install-action@ebb229c6baa68383264f2822689b07b4916d9177
         with:
           tool: cargo-hack
       - name: cargo hack
@@ -96,9 +94,9 @@ jobs:
     name: semver
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Check semver
-        uses: obi1kenobi/cargo-semver-checks-action@7272cc2caa468d3e009a2b0a9cc366839348237b
+        uses: obi1kenobi/cargo-semver-checks-action@5b298c9520f7096a4683c0bd981a7ac5a7e249ae
 
   msrv:
     runs-on: ubuntu-latest
@@ -109,9 +107,9 @@ jobs:
         msrv: [1.82.0]
     name: MSRV
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install ${{ matrix.msrv }}
-        uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+        uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921
         with:
           toolchain: ${{ matrix.msrv }}
       - name: cargo +${{ matrix.msrv }} check
@@ -122,11 +120,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@6d653acede28d24f02e3cd41383119e8b1b35921
         with:
           toolchain: nightly
-      - uses: Swatinem/rust-cache@f0deed1e0edfc6a9be95417288c0e1099b1eeec3
+      - uses: Swatinem/rust-cache@f13886b937689c021905a6b90929199931d60db1
 
       - run: cargo generate-lockfile -Z direct-minimal-versions
       - run: cargo test --locked --workspace --all-features
