@@ -33,6 +33,40 @@ pub enum FallbackLevel {
 }
 
 impl FallbackLevel {
+    /// The next smaller boundary used to probe a long section.
+    pub fn boundary_level_for_probe(self) -> Option<Self> {
+        match self {
+            Self::Sentence => Some(Self::Word),
+            Self::Char | Self::GraphemeCluster | Self::Word => None,
+        }
+    }
+
+    /// Find the first section without scanning the whole remaining document.
+    /// The returned section is a lower bound when `truncated` is true.
+    pub fn first_section_within(self, text: &str, window: usize) -> Option<(&str, bool)> {
+        if window >= text.len() {
+            return self
+                .sections(text)
+                .next()
+                .map(|(_, section)| (section, false));
+        }
+
+        let mut end = window.max(1);
+        while !text.is_char_boundary(end) {
+            end += 1;
+        }
+
+        match self.sections(&text[..end]).next() {
+            // A boundary near the cut may disappear with more context.
+            Some((_, section)) if section.len() >= end / 2 => Some((section, true)),
+            Some((_, section)) if section.len() < end => self
+                .sections(text)
+                .next()
+                .map(|(_, section)| (section, false)),
+            _ => Some((&text[..end], true)),
+        }
+    }
+
     #[auto_enum(Iterator)]
     pub fn sections(self, text: &str) -> impl Iterator<Item = (usize, &str)> {
         match self {
@@ -54,6 +88,47 @@ impl FallbackLevel {
                 .segment_str(text)
                 .tuple_windows()
                 .map(|(i, j)| (i, &text[i..j])),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use strum::IntoEnumIterator;
+
+    use super::*;
+
+    #[test]
+    fn bounded_first_section_is_a_prefix_of_the_full_section() {
+        let text = "Short sentence one. Another sentence follows here. And a third.";
+
+        for level in FallbackLevel::iter() {
+            let expected = level.sections(text).next().unwrap().1;
+            for window in [1, 5, 18, 19, 20, 40, text.len(), text.len() + 10] {
+                let (section, truncated) = level.first_section_within(text, window).unwrap();
+                assert!(expected.starts_with(section), "{level:?} {window}");
+                if !truncated {
+                    assert_eq!(section, expected, "{level:?} {window}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn bounded_section_handles_long_unbroken_text_and_unicode() {
+        let text = "https://example.com/a 2026-01-01T00:00:00+02:00   ".repeat(2_000);
+        let (section, truncated) = FallbackLevel::Sentence
+            .first_section_within(&text, 1_000)
+            .unwrap();
+        assert!(truncated);
+        assert!(section.len() <= 1_000);
+
+        let unicode = "é".repeat(1_000);
+        for window in 1..10 {
+            let (section, _) = FallbackLevel::Sentence
+                .first_section_within(&unicode, window)
+                .unwrap();
+            assert!(unicode.is_char_boundary(section.len()));
         }
     }
 }

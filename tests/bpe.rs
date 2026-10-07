@@ -12,11 +12,7 @@ fn char_offset_of(text: &str, byte_offset: usize) -> usize {
 #[test]
 fn text_splitter_respects_bpe_token_limits() {
     let tokenizer = cl100k_base();
-    let splitter = TextSplitter::new(
-        ChunkConfig::new(10)
-            .with_trim(false)
-            .with_sizer(tokenizer),
-    );
+    let splitter = TextSplitter::new(ChunkConfig::new(10).with_trim(false).with_sizer(tokenizer));
 
     let text = "This is a short paragraph with enough words to require \
                 multiple chunks when the capacity is limited to ten tokens.";
@@ -36,7 +32,11 @@ fn text_splitter_respects_bpe_token_limits() {
         );
     }
 
-    assert_eq!(previous_end, text.len(), "chunks should cover the full input");
+    assert_eq!(
+        previous_end,
+        text.len(),
+        "chunks should cover the full input"
+    );
 
     let reconstructed: String = chunk_indices.iter().map(|(_, chunk)| *chunk).collect();
     assert_eq!(reconstructed, text, "reconstructed text should match input");
@@ -46,11 +46,8 @@ fn text_splitter_respects_bpe_token_limits() {
 #[test]
 fn markdown_chunk_char_indices_are_aligned_with_bpe() {
     let tokenizer = cl100k_base();
-    let splitter = MarkdownSplitter::new(
-        ChunkConfig::new(60)
-            .with_trim(false)
-            .with_sizer(tokenizer),
-    );
+    let splitter =
+        MarkdownSplitter::new(ChunkConfig::new(60).with_trim(false).with_sizer(tokenizer));
 
     let chunks = splitter
         .chunk_char_indices(SYMBOLIC_MARKDOWN)
@@ -61,10 +58,16 @@ fn markdown_chunk_char_indices_are_aligned_with_bpe() {
     let mut last_byte = 0;
     for chunk in &chunks {
         // Byte offsets should be monotonic and match the slice in the source text.
-        assert!(chunk.byte_offset >= last_byte, "byte offsets should increase");
+        assert!(
+            chunk.byte_offset >= last_byte,
+            "byte offsets should increase"
+        );
         let source_slice =
             &SYMBOLIC_MARKDOWN[chunk.byte_offset..chunk.byte_offset + chunk.chunk.len()];
-        assert_eq!(source_slice, chunk.chunk, "chunk content should match source slice");
+        assert_eq!(
+            source_slice, chunk.chunk,
+            "chunk content should match source slice"
+        );
 
         // Char offsets should match the number of chars before the byte offset.
         let expected_char_offset = char_offset_of(SYMBOLIC_MARKDOWN, chunk.byte_offset);
@@ -88,11 +91,8 @@ fn markdown_chunk_char_indices_are_aligned_with_bpe() {
 #[test]
 fn markdown_splitter_handles_graphemes_under_bpe_limits() {
     let tokenizer = o200k_base();
-    let splitter = MarkdownSplitter::new(
-        ChunkConfig::new(8)
-            .with_trim(false)
-            .with_sizer(tokenizer),
-    );
+    let splitter =
+        MarkdownSplitter::new(ChunkConfig::new(8).with_trim(false).with_sizer(tokenizer));
 
     // Includes multi-codepoint graphemes (skin tone + ZWJ sequences).
     let text = "# Emojis\n\n🤦🏽‍♂️🤷🏽‍♀️ keep their boundaries intact.\n";
@@ -144,11 +144,8 @@ fn markdown_splitter_bpe_with_default_trim_stays_monotonic() {
 #[test]
 fn markdown_splitter_respects_bpe_token_limits() {
     let tokenizer = o200k_base();
-    let splitter = MarkdownSplitter::new(
-        ChunkConfig::new(30)
-            .with_trim(false)
-            .with_sizer(tokenizer),
-    );
+    let splitter =
+        MarkdownSplitter::new(ChunkConfig::new(30).with_trim(false).with_sizer(tokenizer));
 
     let text = r#"# Title
 
@@ -176,7 +173,11 @@ token budget. **Bold words** and `inline code` stay intact.
         );
     }
 
-    assert_eq!(previous_end, text.len(), "chunks should cover the full input");
+    assert_eq!(
+        previous_end,
+        text.len(),
+        "chunks should cover the full input"
+    );
 
     let reconstructed: String = chunk_indices.iter().map(|(_, chunk)| *chunk).collect();
     assert_eq!(reconstructed, text, "reconstructed text should match input");
@@ -191,11 +192,8 @@ token budget. **Bold words** and `inline code` stay intact.
 #[test]
 fn symbolic_markdown_fixture_splits_cleanly_with_bpe() {
     let tokenizer = cl100k_base();
-    let splitter = MarkdownSplitter::new(
-        ChunkConfig::new(80)
-            .with_trim(false)
-            .with_sizer(tokenizer),
-    );
+    let splitter =
+        MarkdownSplitter::new(ChunkConfig::new(80).with_trim(false).with_sizer(tokenizer));
 
     let chunk_indices = splitter
         .chunk_indices(SYMBOLIC_MARKDOWN)

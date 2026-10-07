@@ -20,6 +20,9 @@ pub use code::{CodeSplitter, CodeSplitterError};
 pub use markdown::MarkdownSplitter;
 pub use text::TextSplitter;
 
+const FALLBACK_WINDOW_FACTOR: usize = 8;
+const MIN_FALLBACK_WINDOW: usize = 1024;
+
 /// Shared interface for splitters that can generate chunks of text based on the
 /// associated semantic level.
 trait Splitter<Sizer>
@@ -448,6 +451,41 @@ where
         self.cursor = start;
     }
 
+    /// Bound fallback segmentation to a window that must contain the next chunk.
+    fn fallback_first_sections(
+        &mut self,
+        remaining_text: &'text str,
+    ) -> Vec<(FallbackLevel, &'text str)> {
+        let mut window = self
+            .capacity
+            .max
+            .saturating_mul(FALLBACK_WINDOW_FACTOR)
+            .max(MIN_FALLBACK_WINDOW);
+
+        loop {
+            let mut truncated_prefix = None;
+            let sections = FallbackLevel::iter()
+                .filter_map(|level| {
+                    let (section, truncated) =
+                        level.first_section_within(remaining_text, window)?;
+                    if truncated {
+                        truncated_prefix = Some(section);
+                    }
+                    Some((level, section))
+                })
+                .collect::<Vec<_>>();
+
+            let Some(prefix) = truncated_prefix else {
+                return sections;
+            };
+            let size = self.chunk_sizer.chunk_size(self.cursor, prefix, self.trim);
+            if self.capacity.fits(size).is_gt() {
+                return sections;
+            }
+            window = window.saturating_mul(2);
+        }
+    }
+
     /// Find the ideal next sections, breaking it up until we find the largest chunk.
     /// Increasing length of chunk until we find biggest size to minimize validation time
     /// on huge chunks
@@ -457,6 +495,7 @@ where
         self.next_sections.clear();
 
         let remaining_text = self.text.get(self.cursor..).unwrap();
+        let mut lower_level = None;
 
         let (semantic_level, mut max_offset) = self.chunk_sizer.find_correct_level(
             self.cursor,
@@ -464,11 +503,40 @@ where
             self.semantic_split
                 .levels_in_remaining_text(self.cursor)
                 .filter_map(|level| {
-                    self.semantic_split
+                    let first_chunk = self
+                        .semantic_split
                         .semantic_chunks(self.cursor, remaining_text, level)
-                        .next()
-                        .map(|(_, str)| (level, str))
+                        .next();
+                    let result = first_chunk.map(|(_, str)| (level, str, lower_level));
+                    lower_level = Some(level);
+                    result
                 }),
+            |lower_level, chunk_end| {
+                lower_level.map_or_else(
+                    || {
+                        let cursor = self.cursor;
+                        Either::Left(
+                            (self.capacity.desired == self.capacity.max)
+                                .then(|| {
+                                    FallbackLevel::Word
+                                        .sections(remaining_text)
+                                        .map(move |(offset, text)| cursor + offset + text.len())
+                                        .take_while(move |end| *end <= chunk_end)
+                                })
+                                .into_iter()
+                                .flatten(),
+                        )
+                    },
+                    |lower_level| {
+                        Either::Right(
+                            self.semantic_split
+                                .semantic_chunks(self.cursor, remaining_text, lower_level)
+                                .map(|(offset, text)| offset + text.len())
+                                .take_while(move |end| *end <= chunk_end),
+                        )
+                    },
+                )
+            },
             self.trim,
         );
 
@@ -479,15 +547,39 @@ where
                 semantic_level,
             ))
         } else {
+            // Keep ranged capacity behavior because token sizes need not be
+            // monotone across candidate prefixes.
+            let first_sections = if self.capacity.desired == self.capacity.max {
+                self.fallback_first_sections(remaining_text)
+            } else {
+                FallbackLevel::iter()
+                    .filter_map(|level| {
+                        level
+                            .sections(remaining_text)
+                            .next()
+                            .map(|(_, section)| (level, section))
+                    })
+                    .collect()
+            };
             let (semantic_level, fallback_max_offset) = self.chunk_sizer.find_correct_level(
                 self.cursor,
                 &self.capacity,
-                FallbackLevel::iter().filter_map(|level| {
-                    level
-                        .sections(remaining_text)
-                        .next()
-                        .map(|(_, str)| (level, str))
-                }),
+                first_sections
+                    .into_iter()
+                    .map(|(level, section)| (level, section, level.boundary_level_for_probe())),
+                |lower_level, chunk_end| {
+                    lower_level.map_or_else(
+                        || Either::Left(std::iter::empty()),
+                        |lower_level| {
+                            Either::Right(
+                                lower_level
+                                    .sections(remaining_text)
+                                    .map(|(offset, text)| self.cursor + offset + text.len())
+                                    .take_while(move |end| *end <= chunk_end),
+                            )
+                        },
+                    )
+                },
                 self.trim,
             );
 
