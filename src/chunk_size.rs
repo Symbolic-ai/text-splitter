@@ -464,14 +464,20 @@ where
             // Skip tokenizing levels that we know are too small anyway.
             let len = str.len();
             if len > capacity.max {
-                let mut lower_boundaries = lower_boundaries_for(lower_level, offset + len);
-                let fits = self.chunk_fits_with_boundaries(
-                    offset,
-                    str,
-                    capacity,
-                    &mut lower_boundaries,
-                    trim,
-                );
+                // Ranged capacities must retain the original whole-section
+                // decision: token counts can shrink as a prefix grows.
+                let fits = if capacity.desired == capacity.max {
+                    let mut lower_boundaries = lower_boundaries_for(lower_level, offset + len);
+                    self.chunk_fits_with_boundaries(
+                        offset,
+                        str,
+                        capacity,
+                        &mut lower_boundaries,
+                        trim,
+                    )
+                } else {
+                    capacity.fits(self.chunk_size(offset, str, trim))
+                };
                 // If this no longer fits, we use the level we are at.
                 if fits.is_gt() {
                     max_offset = Some(offset + len);
@@ -685,6 +691,44 @@ mod tests {
             self.calls.fetch_add(1, atomic::Ordering::SeqCst);
             Characters.size(chunk)
         }
+    }
+
+    #[test]
+    fn ranged_capacity_sizes_the_full_section() {
+        struct NonmonotoneSizer {
+            full_len: usize,
+            sized_lengths: RefCell<Vec<usize>>,
+        }
+
+        impl ChunkSizer for NonmonotoneSizer {
+            fn size(&self, chunk: &str) -> usize {
+                self.sized_lengths.borrow_mut().push(chunk.len());
+                if chunk.len() == self.full_len {
+                    5
+                } else {
+                    100
+                }
+            }
+        }
+
+        let text = "x".repeat(1_000);
+        let sizer = NonmonotoneSizer {
+            full_len: text.len(),
+            sized_lengths: RefCell::new(Vec::new()),
+        };
+        let mut memoized = MemoizedChunkSizer::new(&sizer);
+        let capacity = ChunkCapacity::new(5).with_max(10).unwrap();
+
+        let result = memoized.find_correct_level(
+            0,
+            &capacity,
+            std::iter::once((1u8, text.as_str(), None)),
+            |_, _| std::iter::once(80),
+            Trim::None,
+        );
+
+        assert_eq!(result, (Some(1), None));
+        assert_eq!(*sizer.sized_lengths.borrow(), vec![text.len()]);
     }
 
     #[test]
