@@ -12,16 +12,19 @@ use ahash::AHashMap;
 use itertools::Itertools;
 use thiserror::Error;
 
+#[cfg(feature = "bpe")]
+mod bpe;
 mod characters;
 #[cfg(feature = "tokenizers")]
 mod huggingface;
 #[cfg(feature = "tiktoken-rs")]
 mod tiktoken;
-#[cfg(feature = "bpe")]
-mod bpe;
 
 use crate::trim::Trim;
 pub use characters::Characters;
+
+const PROBE_OVERSHOOT_DIVISOR: usize = 4;
+const PROBE_START_BYTE_FACTOR: usize = 8;
 
 /// Indicates there was an error with the chunk capacity configuration.
 /// The `Display` implementation will provide a human-readable error message to
@@ -431,32 +434,44 @@ where
     }
 
     /// Find the best level to start splitting the text
-    pub fn find_correct_level<'text, L: fmt::Debug>(
+    pub fn find_correct_level<'text, L, Boundaries>(
         &mut self,
         offset: usize,
         capacity: &ChunkCapacity,
-        levels_with_first_chunk: impl Iterator<Item = (L, &'text str)>,
+        levels_with_first_chunk: impl Iterator<Item = (L, &'text str, Option<L>)>,
+        mut lower_boundaries_for: impl FnMut(Option<L>, usize) -> Boundaries,
         trim: Trim,
-    ) -> (Option<L>, Option<usize>) {
+    ) -> (Option<L>, Option<usize>)
+    where
+        L: Copy + fmt::Debug,
+        Boundaries: Iterator<Item = usize>,
+    {
         let mut semantic_level = None;
         let mut max_offset = None;
 
         // We assume that larger levels are also longer. We can skip lower levels if going to a higher level would result in a shorter text
-        let levels_with_first_chunk =
-            levels_with_first_chunk.coalesce(|(a_level, a_str), (b_level, b_str)| {
+        let levels_with_first_chunk = levels_with_first_chunk.coalesce(
+            |(a_level, a_str, a_lower), (b_level, b_str, b_lower)| {
                 if a_str.len() >= b_str.len() {
-                    Ok((b_level, b_str))
+                    Ok((b_level, b_str, b_lower))
                 } else {
-                    Err(((a_level, a_str), (b_level, b_str)))
+                    Err(((a_level, a_str, a_lower), (b_level, b_str, b_lower)))
                 }
-            });
+            },
+        );
 
-        for (level, str) in levels_with_first_chunk {
+        for (level, str, lower_level) in levels_with_first_chunk {
             // Skip tokenizing levels that we know are too small anyway.
             let len = str.len();
             if len > capacity.max {
-                let chunk_size = self.chunk_size(offset, str, trim);
-                let fits = capacity.fits(chunk_size);
+                let mut lower_boundaries = lower_boundaries_for(lower_level, offset + len);
+                let fits = self.chunk_fits_with_boundaries(
+                    offset,
+                    str,
+                    capacity,
+                    &mut lower_boundaries,
+                    trim,
+                );
                 // If this no longer fits, we use the level we are at.
                 if fits.is_gt() {
                     max_offset = Some(offset + len);
@@ -468,6 +483,51 @@ where
         }
 
         (semantic_level, max_offset)
+    }
+
+    fn chunk_fits_with_boundaries(
+        &mut self,
+        offset: usize,
+        chunk: &str,
+        capacity: &ChunkCapacity,
+        lower_boundaries: &mut impl Iterator<Item = usize>,
+        trim: Trim,
+    ) -> Ordering {
+        let chunk_end = offset + chunk.len();
+        let probe_max = capacity
+            .max
+            .saturating_add((capacity.max / PROBE_OVERSHOOT_DIVISOR).max(1));
+        let probe_start = offset
+            .saturating_add(capacity.max.saturating_mul(PROBE_START_BYTE_FACTOR).max(1))
+            .min(chunk_end);
+        if probe_start == chunk_end {
+            return capacity.fits(self.chunk_size(offset, chunk, trim));
+        }
+
+        let mut step: usize = 1;
+        let mut next_boundary =
+            lower_boundaries.find(|&boundary| boundary > offset && boundary >= probe_start);
+
+        while let Some(boundary) = next_boundary {
+            if boundary > chunk_end {
+                break;
+            }
+
+            let prefix = chunk
+                .get(..(boundary - offset))
+                .expect("valid character boundary");
+            let chunk_size = self.chunk_size(offset, prefix, trim);
+            let fits = capacity.fits(chunk_size);
+            if chunk_size > probe_max || boundary == chunk_end {
+                return fits;
+            }
+
+            let skip = step.saturating_sub(1);
+            step = step.saturating_mul(2);
+            next_boundary = lower_boundaries.nth(skip);
+        }
+
+        capacity.fits(self.chunk_size(offset, chunk, trim))
     }
 
     /// Clear the cached values. Once we've moved the cursor,
