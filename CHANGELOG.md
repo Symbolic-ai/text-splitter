@@ -7,6 +7,8 @@
 - `MarkdownSplitter` has a new `Sentence` semantic level between inline elements and blocks. A chunk now ends at a sentence boundary when the sentence fits, and goes below a sentence only when the sentence does not fit.
 - Consecutive text events of one text node are one inline section. A smart quote, an entity or an escape no longer splits a word ("isn" | "'" | "t").
 - The first sentence of a list item, task, block quote or footnote definition keeps its marker.
+- The Unicode sentence fallback keeps an ordered list marker ("1. ", "2) ") with the next sentence, in `MarkdownSplitter` and `TextSplitter`. A chunk is no longer only "1.".
+- Plain text that touches inline markup inside a word ("`foo`s", "foo*bar*") is one inline section, so a chunk no longer ends inside the word. A link or an image stays a separate section.
 
 ## v0.28.0
 

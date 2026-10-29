@@ -7287,9 +7287,9 @@ expression: chunks
 - "</a></p>"
 - "````````````````````````````````"
 - "## Autolinks"
-- "[Autolink](@)s are absolute URIs"
-- "and email addresses inside\n`<`"
-- "and `>`."
+- "[Autolink](@)"
+- s are absolute URIs and email
+- "addresses inside\n`<` and `>`."
 - "They are parsed as links, with"
 - the URL or email address
 - as the link label.

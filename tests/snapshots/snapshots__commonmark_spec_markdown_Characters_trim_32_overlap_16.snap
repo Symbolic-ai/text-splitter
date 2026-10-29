@@ -7784,7 +7784,7 @@ expression: chunks
 - "````````````````````````````````"
 - There are three kinds of
 - "[reference link](@)s:"
-- "[full](#full-reference-link),"
+- "s:\n[full](#full-reference-link),"
 - "[collapsed](#collapsed-reference"
 - "-reference-link),\nand"
 - "[shortcut](#shortcut-reference-"
@@ -8569,8 +8569,8 @@ expression: chunks
 - "=\"title\">foo</a></p>"
 - "````````````````````````````````"
 - "## Autolinks"
-- "[Autolink](@)s are absolute URIs"
-- absolute URIs and email
+- "[Autolink](@)"
+- s are absolute URIs and email
 - URIs and email addresses inside
 - "`<` and `>`."
 - "They are parsed as links, with"

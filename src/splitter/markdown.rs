@@ -269,6 +269,8 @@ struct Word {
     outer: Option<usize>,
     /// True when the last event of the outer element is a text event.
     outer_ends_in_text: bool,
+    /// True when the outer element holds a link or an image.
+    outer_has_link: bool,
     /// Number of inline spans that are open now.
     depth: usize,
     /// Last visible character of the line, when the last inline event shows
@@ -281,7 +283,9 @@ impl Word {
     /// same word as the outer element: it begins directly after the element,
     /// the characters on both sides of the boundary are word characters, and
     /// plain text is on one side ("`foo`s", "foo*bar*"). Two links or spans
-    /// next to each other stay separate elements.
+    /// next to each other stay separate elements. A link or an image never
+    /// joins a word: the joined range could be too large, and the fallback
+    /// could then cut inside the URL.
     fn joins(
         &self,
         ranges: &[(Element, Range<usize>)],
@@ -292,7 +296,9 @@ impl Word {
         let Some(outer) = self.outer.filter(|_| self.depth == 0) else {
             return false;
         };
-        (self.outer_ends_in_text || matches!(events.first(), Some((Event::Text(_), _))))
+        !self.outer_has_link
+            && !holds_link(events)
+            && (self.outer_ends_in_text || matches!(events.first(), Some((Event::Text(_), _))))
             && self.last.is_some_and(is_word_char)
             && first_visible_char(events).is_some_and(is_word_char)
             && text
@@ -312,6 +318,7 @@ impl Word {
     fn start(&mut self, ranges: &[(Element, Range<usize>)], event: &Event<'_>) {
         if self.depth == 0 {
             self.outer = Some(ranges.len());
+            self.outer_has_link = false;
         }
         self.enter(event);
     }
@@ -326,7 +333,10 @@ impl Word {
                     self.last = Some(last);
                 }
             }
-            Event::Start(_) => self.depth += 1,
+            Event::Start(tag) => {
+                self.depth += 1;
+                self.outer_has_link |= matches!(tag, Tag::Link { .. } | Tag::Image { .. });
+            }
             _ => self.last = None,
         }
     }
@@ -339,6 +349,27 @@ impl Word {
 /// A letter, a digit or an apostrophe.
 fn is_word_char(c: char) -> bool {
     c.is_alphanumeric() || c == '\'' || c == '\u{2019}'
+}
+
+/// True when the inline span at the start of `events` is or holds a link or
+/// an image.
+fn holds_link(events: &[(Event<'_>, Range<usize>)]) -> bool {
+    let mut depth = 0_usize;
+    for (event, _) in events {
+        match event {
+            Event::Start(Tag::Link { .. } | Tag::Image { .. }) => return true,
+            Event::Start(tag) if is_inline_tag(tag) => depth += 1,
+            Event::End(tag) if is_inline_tag_end(*tag) => {
+                depth = depth.saturating_sub(1);
+                if depth == 0 {
+                    return false;
+                }
+            }
+            _ if depth == 0 => return false,
+            _ => {}
+        }
+    }
+    false
 }
 
 /// The first visible character of the inline element at the start of
@@ -1160,7 +1191,6 @@ mod tests {
         for (text, expected) in [
             ("Call `foo`s now", vec!["Call ", "`foo`s now"]),
             ("Call *foo*s now", vec!["Call ", "*foo*s now"]),
-            ("Call [foo](u)s now", vec!["Call ", "[foo](u)s now"]),
             ("Call foo`bar` now", vec!["Call foo`bar`", " now"]),
             ("Call foo*bar* now", vec!["Call foo*bar*", " now"]),
             ("Call `foo`'s now", vec!["Call ", "`foo`'s now"]),
@@ -1178,6 +1208,16 @@ mod tests {
             ("Call `foo`, now", vec!["Call ", "`foo`", ", now"]),
             ("[a](u)[b](v) c", vec!["[a](u)", "[b](v)", " c"]),
             ("**a**_b_ c", vec!["**a**", "_b_", " c"]),
+            ("Call [foo](u)s now", vec!["Call ", "[foo](u)", "s now"]),
+            ("Call foo[bar](u) now", vec!["Call foo", "[bar](u)", " now"]),
+            (
+                "Call foo*[bar](u)* now",
+                vec!["Call foo*", "[bar](u)", "* now"],
+            ),
+            (
+                "Call *see [foo](u) x*s now",
+                vec!["Call ", "*see [foo](u) x*", "s now"],
+            ),
         ] {
             assert_eq!(expected, inline_sections(text), "{text}");
         }
@@ -1188,9 +1228,9 @@ mod tests {
         let text = "Some words before `foo`s and some words after it.";
         let chunks = MarkdownSplitter::new(24).chunks(text).collect::<Vec<_>>();
 
-        assert!(
-            chunks.iter().all(|chunk| !chunk.starts_with('s')),
-            "{chunks:?}"
+        assert_eq!(
+            vec!["Some words before", "`foo`s and some words", "after it."],
+            chunks
         );
     }
 
