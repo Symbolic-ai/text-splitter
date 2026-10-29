@@ -1,5 +1,6 @@
 ---
 source: tests/snapshots.rs
+assertion_line: 332
 expression: chunks
 ---
 - "---"
@@ -66,8 +67,9 @@ expression: chunks
 - "As Gruber writes:"
 - ">"
 - The overriding design goal for
-- "design goal for Markdown'"
-- "'s formatting syntax is\n>"
+- "design goal for Markdown's"
+- "for Markdown's formatting syntax"
+- " syntax is\n>"
 - to make it as readable as
 - as readable as possible.
 - "The idea is that a\n>"
@@ -75,10 +77,9 @@ expression: chunks
 - document should be publishable
 - " be publishable as-is, as\n>"
 - "plain text, without looking like"
-- "looking like it'"
-- "'s been marked up with tags\n>"
-- "> or formatting instructions.\n>"
-- "> ("
+- "looking like it's been marked up"
+- " been marked up with tags\n>"
+- "or formatting instructions.\n> ("
 - "<https://daringfireball.net/"
 - /projects/markdown/>)
 - The point can be illustrated by
@@ -150,12 +151,11 @@ expression: chunks
 - "two of the outer list.\n```"
 - "The AsciiDoc version is,"
 - "version is, arguably, easier to"
-- ", easier to write. You don'"
-- "'t need"
+- ", easier to write."
+- "You don't need"
 - to worry about indentation.
 - But the Markdown version is much
-- version is much easier
-- to read.
+- " version is much easier\nto read."
 - The nesting of list items is
 - of list items is apparent to the
 - apparent to the eye in the
@@ -167,7 +167,7 @@ expression: chunks
 - "["
 - canonical description of
 - "description of Markdown's"
-- "'s\nsyntax"
+- syntax
 - "](https://daringfireball.net/"
 - /projects/markdown/syntax)
 - does not specify the syntax
@@ -187,13 +187,14 @@ expression: chunks
 - "they, too, must be indented four"
 - "be indented four spaces, but"
 - "`Markdown.pl` does"
-- not require that.
+- " does\n    not require that."
 - "This is hardly a \"corner case,\""
-- "\"corner case,\" and divergences"
+- "a \"corner case,\" and divergences"
 - between implementations on this
 - on this issue often lead to
 - often lead to surprises for
-- users in real documents. (See
+- users in real documents.
+- (See
 - "[this comment by John\n    Gruber"
 - "](https://web.archive.org/web/"
 - "/web/20170611172104/http://"
@@ -228,7 +229,7 @@ expression: chunks
 - "3."
 - Is a blank line needed before an
 - needed before an indented code
-- "an indented code block?\n    ("
+- an indented code block?
 - "(`Markdown.pl`"
 - "requires it, but this is not"
 - but this is not mentioned in the
@@ -241,11 +242,10 @@ expression: chunks
 - What is the exact rule for
 - exact rule for determining when
 - determining when list items get
-- "wrapped in `<p>`"
-- "tags?  Can a list be partially \""
-- "\"loose\" and partially\n    \"tight"
-- "\"tight\""
-- "?"
+- "wrapped in `<p>` tags?"
+- "Can a list be partially \"loose\""
+- "\"loose\" and partially"
+- "\"tight\"?"
 - What should we do with a list
 - do with a list like this?
 - "``` markdown\n    1. one"
@@ -325,8 +325,7 @@ expression: chunks
 - What are the precedence rules
 - precedence rules between block-
 - between block-level and inline-
-- and inline-level
-- structure?
+- " and inline-level\n    structure?"
 - "For example, how should the"
 - ", how should the following be"
 - the following be parsed?
@@ -338,8 +337,8 @@ expression: chunks
 - "```"
 - "11."
 - Can list items include section
-- include section headings?  (
-- "`Markdown.pl` does not"
+- include section headings?
+- "(`Markdown.pl` does not"
 - "allow this, but does allow"
 - ", but does allow blockquotes to"
 - blockquotes to include headings.
@@ -381,8 +380,7 @@ expression: chunks
 - Because there is no unambiguous
 - "no unambiguous spec,"
 - "spec, implementations have"
-- have diverged
-- considerably.
+- " have diverged\nconsiderably."
 - "As a result, users are often"
 - users are often surprised to
 - surprised to find that
@@ -396,10 +394,12 @@ expression: chunks
 - pandoc).
 - "To make matters worse, because"
 - "worse, because nothing in"
-- " nothing in Markdown counts\nas a"
-- "as a \"syntax error,\""
-- "\" the divergence often isn'"
-- "'t discovered right away."
+- nothing in Markdown counts
+- "as a \"syntax error,\" the"
+- "error,\" the divergence often"
+- "divergence often isn't"
+- "often isn't discovered right"
+- discovered right away.
 - "## About this document"
 - This document attempts to
 - attempts to specify Markdown
@@ -407,8 +407,7 @@ expression: chunks
 - Markdown syntax unambiguously.
 - It contains many examples with
 - examples with side-by-side
-- side-by-side Markdown and
-- HTML.
+- " side-by-side Markdown and\nHTML."
 - These are intended to double as
 - to double as conformance tests.
 - "An\naccompanying script"
@@ -444,12 +443,12 @@ expression: chunks
 - Note that not every feature of
 - every feature of the HTML
 - of the HTML samples is mandated
-- is mandated by
-- the spec.
+- " is mandated by\nthe spec."
 - "For example, the spec says what"
 - spec says what counts as a link
-- "destination, but it doesn'"
-- t mandate that non-ASCII
+- "destination, but it doesn't"
+- ", but it doesn't mandate that"
+- mandate that non-ASCII
 - that non-ASCII characters in
 - the URL be percent-encoded.
 - "To use the automatic tests,"
@@ -484,7 +483,8 @@ expression: chunks
 - to represent tabs.
 - "# Preliminaries"
 - "## Characters and lines"
-- "Any sequence of [characters]"
+- "Any sequence of [characters] is"
+- "[characters] is a valid"
 - "] is a valid CommonMark"
 - document.
 - "A [character](@)"
@@ -501,20 +501,21 @@ expression: chunks
 - This spec does not specify an
 - not specify an encoding; it
 - an encoding; it thinks of lines
-- " thinks of lines as composed\nof"
-- "of [characters]"
-- rather than bytes.
+- thinks of lines as composed
+- "of [characters] rather than"
+- "] rather than bytes."
 - A conforming parser may be
 - parser may be limited
 - to a certain encoding.
 - "A [line](@)"
 - "is a sequence of zero or more ["
-- "[characters]"
-- "]\nother than line feed (`U+000A`"
+- "zero or more [characters]"
+- "other than line feed (`U+000A`"
 - "`U+000A`) or carriage return ("
-- "`U+000D`),\nfollowed by a ["
-- "followed by a [line ending]"
-- "] or by the end of file."
+- "`U+000D`),"
+- "followed by a [line ending] or"
+- "[line ending] or by the end of"
+- or by the end of file.
 - "A [line ending](@)"
 - "is a line feed (`U+000A`"
 - "`U+000A`), a carriage return\n("
@@ -545,7 +546,7 @@ expression: chunks
 - "`U+000C`), or\ncarriage return ("
 - "`U+000D`)."
 - "[Unicode whitespace](@)"
-- " is a sequence of one or more\n["
+- is a sequence of one or more
 - "[Unicode whitespace characters]."
 - "A [tab](@) is `U+0009`."
 - "A [space](@) is `U+0020`."
@@ -578,8 +579,8 @@ expression: chunks
 - "`S` (symbol) general categories."
 - "## Tabs"
 - Tabs in lines are not expanded
-- "are not expanded to [spaces]"
-- "[spaces].  However,"
+- "are not expanded to [spaces]."
+- "However,"
 - in contexts where spaces help to
 - spaces help to define block
 - "to define block structure,"
@@ -644,7 +645,8 @@ expression: chunks
 - "optionally by a space, which is"
 - "space, which is not considered"
 - not considered part of the
-- content.  In the following case
+- content.
+- "In the following case `>`"
 - "`>` is followed by a tab,"
 - which is treated as if it were
 - as if it were expanded into
@@ -761,8 +763,8 @@ expression: chunks
 - ".\n<p>\\<em>emphasis</em></p>"
 - "````````````````````````````````"
 - A backslash at the end of the
-- "the end of the line is a ["
-- "[hard line break]:"
+- "the end of the line is a [hard"
+- "line is a [hard line break]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "foo\\\nbar\n.\n<p>foo<br />\nbar</p>"
@@ -802,8 +804,8 @@ expression: chunks
 - "in all other contexts, including"
 - ", including URLs and link titles"
 - "and link titles,"
-- "link references, and ["
-- "[info strings] in ["
+- "link references, and [info"
+- ", and [info strings] in [fenced"
 - "] in [fenced code blocks]:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -834,19 +836,16 @@ expression: chunks
 - in place of the corresponding
 - "corresponding Unicode character,"
 - "with the following exceptions:"
-- "-"
-- Entity and character references
-- references are not recognized in
-- recognized in code
+- "- Entity and character"
+- and character references are not
+- are not recognized in code
 - blocks and code spans.
-- "-"
-- Entity and character references
-- references cannot stand in place
-- stand in place of
+- "- Entity and character"
+- and character references cannot
+- cannot stand in place of
 - special characters that define
 - that define structural elements
-- elements in
-- CommonMark.
+- " elements in\n  CommonMark."
 - "For example, although `&#42;`"
 - "`&#42;` can be used"
 - "in place of a literal `*`"
@@ -868,8 +867,8 @@ expression: chunks
 - "[Entity references](@)"
 - "consist of `&`"
 - "`&` + any of the valid"
-- "HTML5 entity names + `;`. The"
-- "`;`. The\ndocument"
+- "HTML5 entity names + `;`."
+- "The\ndocument"
 - "<https://html.spec.whatwg.org/"
 - /entities.json>
 - is used as an authoritative
@@ -890,9 +889,9 @@ expression: chunks
 - "````````````````````````````````"
 - "[Decimal numeric character"
 - "references](@)\nconsist of `&#`"
-- "consist of `&#` + a string of 1"
-- + a string of 1--
-- "--7 arabic digits + `;`. A"
+- + a string of 1--7 arabic digits
+- "-7 arabic digits + `;`."
+- A
 - numeric character reference is
 - reference is parsed as the
 - is parsed as the corresponding
@@ -900,8 +899,8 @@ expression: chunks
 - Invalid Unicode code points will
 - code points will be replaced by
 - the REPLACEMENT CHARACTER (
-- "`U+FFFD`"
-- ").  For security reasons,"
+- "`U+FFFD`)."
+- "For security reasons,"
 - "the code point `U+0000`"
 - will also be replaced by
 - "`U+FFFD`."
@@ -969,10 +968,10 @@ expression: chunks
 - references are recognized in any
 - context besides code spans or
 - "code spans or code blocks,"
-- " or code blocks, including\nURLs,"
-- "URLs, [link titles], and ["
+- "or code blocks, including"
+- "URLs, [link titles], and [fenced"
 - "], and [fenced code block][] ["
-- "][] [info strings]:"
+- "code block][] [info strings]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "<a href=\"&ouml;&ouml;.html\">\n."
@@ -1054,8 +1053,8 @@ expression: chunks
 - "# Blocks and inlines"
 - We can think of a document as a
 - a document as a sequence of
-- "[blocks](@)---"
-- structural elements like
+- "[blocks](@)"
+- "---structural elements like"
 - "elements like paragraphs, block"
 - "quotations, lists, headings,"
 - "lists, headings, rules, and code"
@@ -1099,8 +1098,7 @@ expression: chunks
 - "paragraphs, headings, and other"
 - ", and other block constructs can"
 - constructs can be parsed for
-- be parsed for inline
-- structure.
+- " be parsed for inline\nstructure."
 - The second step requires
 - step requires information about
 - about link reference
@@ -1258,10 +1256,10 @@ expression: chunks
 - thematic break could also be
 - could also be interpreted as the
 - "as the underline of a [setext"
-- "[setext\nheading]"
-- "], the interpretation as a\n["
-- "[setext heading]"
-- takes precedence.
+- "heading], the interpretation as"
+- as a
+- "[setext heading] takes"
+- "heading] takes precedence."
 - "Thus, for example,"
 - "this is a setext heading, not a"
 - "heading, not a paragraph"
@@ -1302,8 +1300,8 @@ expression: chunks
 - "of characters, parsed as inline"
 - "parsed as inline content,"
 - "inline content, between an"
-- opening sequence of 1--
-- "--6 unescaped `#`"
+- opening sequence of 1--6
+- "sequence of 1--6 unescaped `#`"
 - "`#` characters and an optional"
 - closing sequence of any number
 - "of any number of unescaped `#`"
@@ -1357,9 +1355,9 @@ expression: chunks
 - At least one space or tab is
 - space or tab is required between
 - "required between the `#`"
-- "`#` characters and the\nheading'"
-- "s contents, unless the heading"
-- the heading is empty.
+- "`#` characters and the"
+- "heading's contents, unless the"
+- ", unless the heading is empty."
 - Note that many
 - implementations currently do not
 - currently do not require the
@@ -1513,9 +1511,8 @@ expression: chunks
 - first line does not
 - have more than 3 spaces of
 - "than 3 spaces of indentation,"
-- " of indentation, followed by\na ["
-- "a [setext heading underline]"
-- "."
+- "of indentation, followed by"
+- "a [setext heading underline]."
 - The lines of text must be such
 - "that, were they not followed by"
 - not followed by the setext
@@ -1524,15 +1521,15 @@ expression: chunks
 - "interpreted as a paragraph:"
 - "as a paragraph:  they cannot be"
 - "interpretable as a [code fence],"
-- "[code fence], [ATX heading]["
-- ", [ATX heading][ATX headings],\n["
-- "ATX headings],\n[block quote]["
-- ",\n[block quote][block quotes], ["
+- "a [code fence], [ATX heading]["
+- ", [ATX heading][ATX headings],"
+- "[block quote][block quotes], ["
 - "block quotes], [thematic break]["
 - "thematic break][thematic breaks]"
-- "thematic breaks],\n[list item]["
-- "],\n[list item][list items], or ["
-- "], or [HTML block][HTML blocks]."
+- "thematic breaks],"
+- "[list item][list items], or ["
+- "items], or [HTML block][HTML"
+- "HTML block][HTML blocks]."
 - "A [setext heading underline](@)"
 - " is a sequence of\n`=`"
 - "`=` characters or a sequence of"
@@ -1543,10 +1540,11 @@ expression: chunks
 - of trailing spaces or tabs.
 - The heading is a level 1 heading
 - "level 1 heading if `=`"
-- "`=` characters are used in\nthe ["
-- "the [setext heading underline]"
+- "`=` characters are used in"
+- "the [setext heading underline],"
+- "underline], and a level 2"
 - "], and a level 2 heading if `-`"
-- characters are used.
+- "`-`\ncharacters are used."
 - The contents of the heading are
 - the heading are the result
 - of parsing the preceding lines
@@ -1556,8 +1554,7 @@ expression: chunks
 - "In general, a setext heading"
 - a setext heading need not be
 - need not be preceded or followed
-- or followed by a
-- blank line.
+- " or followed by a\nblank line."
 - "However, it cannot interrupt a"
 - "interrupt a paragraph, so when a"
 - setext heading comes after a
@@ -1583,8 +1580,9 @@ expression: chunks
 - The contents are the result of
 - the result of parsing the
 - "of parsing the headings's raw"
-- content as inlines.  The heading
-- "'s raw content is formed by"
+- content as inlines.
+- "The heading's raw content is"
+- raw content is formed by
 - concatenating the lines and
 - the lines and removing initial
 - removing initial and final
@@ -1681,9 +1679,10 @@ expression: chunks
 - "<p>of dashes&quot;/&gt;</p>"
 - "````````````````````````````````"
 - The setext heading underline
-- "underline cannot be a ["
-- "[lazy continuation\nline]"
-- "] in a list item or block quote:"
+- "underline cannot be a [lazy"
+- "be a [lazy continuation"
+- "line] in a list item or block"
+- "item or block quote:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "> Foo\n---\n.\n<blockquote>"
@@ -1782,12 +1781,12 @@ expression: chunks
 - "1. paragraph \"Foo\", heading \"bar"
 - "\", heading \"bar\", paragraph \"baz"
 - ", paragraph \"baz\""
-- "2. paragraph \"Foo bar\""
-- "\", thematic break, paragraph \""
-- "\"baz\""
+- "2. paragraph \"Foo bar\", thematic"
+- "bar\", thematic break, paragraph"
+- "break, paragraph \"baz\""
 - "3. paragraph \"Foo bar --- baz\""
 - "4. heading \"Foo bar\", paragraph"
-- "\", paragraph \"baz\""
+- "bar\", paragraph \"baz\""
 - We find interpretation 4 most
 - "4 most natural, and"
 - "natural, and interpretation 4"
@@ -1817,7 +1816,7 @@ expression: chunks
 - "````````````````````````````````"
 - or use a thematic break that
 - "break that cannot count as a ["
-- "[setext heading\nunderline]"
+- "count as a [setext heading"
 - "underline], such as"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -1835,9 +1834,9 @@ expression: chunks
 - "````````````````````````````````"
 - "## Indented code blocks"
 - "An [indented code block](@)"
-- " is composed of one or more\n["
-- "[indented chunks]"
-- "] separated by blank lines.\nAn"
+- is composed of one or more
+- "[indented chunks] separated by"
+- "] separated by blank lines."
 - "An [indented chunk](@)"
 - is a sequence of non-blank lines
 - "non-blank lines,"
@@ -1848,11 +1847,11 @@ expression: chunks
 - block are the literal contents
 - "literal contents of the lines,"
 - "of the lines, including trailing"
-- "[line endings]"
-- ", minus four spaces of"
+- "[line endings], minus four"
+- "], minus four spaces of"
 - four spaces of indentation.
 - "An indented code block has no ["
-- "[info string]."
+- "block has no [info string]."
 - An indented code block cannot
 - block cannot interrupt a
 - "interrupt a paragraph, so there"
@@ -1882,8 +1881,8 @@ expression: chunks
 - block and as indicating that
 - indicating that material belongs
 - "material belongs to a [list"
-- "[list\nitem][list items]"
-- ", the list item interpretation"
+- "item][list items], the list item"
+- "], the list item interpretation"
 - "interpretation takes precedence:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -1935,7 +1934,8 @@ expression: chunks
 - "````````````````````````````````"
 - An indented code block cannot
 - block cannot interrupt a
-- interrupt a paragraph.  (This
+- interrupt a paragraph.
+- (This
 - allows hanging indents and the
 - indents and the like.)
 - "````````````````````````````````"
@@ -2007,10 +2007,9 @@ expression: chunks
 - of at least three consecutive
 - consecutive backtick characters
 - "characters (`` ` ``) or"
-- "`` ` ``) or\ntildes (`~`"
-- ).
+- "`` ` ``) or\ntildes (`~`)."
 - (Tildes and backticks cannot be
-- " cannot be mixed.)\nA"
+- cannot be mixed.)
 - "A [fenced code block](@)"
 - "begins with a code fence,"
 - "a code fence, preceded by up to"
@@ -2025,8 +2024,8 @@ expression: chunks
 - is trimmed of leading and
 - of leading and trailing
 - spaces or tabs and called the
-- "[info string](@). If the ["
-- ". If the [info string] comes"
+- "[info string](@)."
+- "If the [info string] comes"
 - "after a backtick fence, it may"
 - "fence, it may not contain any"
 - not contain any backtick
@@ -2044,9 +2043,9 @@ expression: chunks
 - the code block consists of all
 - consists of all subsequent lines
 - "subsequent lines, until"
-- "a closing [code fence]"
-- of the same type as the code
-- type as the code block
+- "a closing [code fence] of the"
+- "fence] of the same type as the"
+- same type as the code block
 - began with (backticks or tildes)
 - "or tildes), and with at least as"
 - with at least as many backticks
@@ -2106,20 +2105,20 @@ expression: chunks
 - The content of a code fence is
 - a code fence is treated as
 - "is treated as literal text, not"
-- "text, not parsed"
-- as inlines.
-- "The first word of the ["
-- "[info string]"
-- "] is typically used to"
+- " text, not parsed\nas inlines."
+- "The first word of the [info"
+- "of the [info string] is"
+- "[info string] is typically used"
+- typically used to
 - specify the language of the code
 - "of the code sample, and rendered"
 - ", and rendered in the `class`"
 - "`class`\nattribute of the `code`"
-- tag.
+- "`code` tag."
 - "However, this spec does not"
 - spec does not mandate any
 - "particular treatment of the ["
-- "[info string]."
+- "of the [info string]."
 - Here is a simple example with
 - "example with backticks:"
 - "````````````````````````````````"
@@ -2181,7 +2180,8 @@ expression: chunks
 - the end of the document
 - "(or the enclosing [block quote]["
 - "[block quote][block quotes] or ["
-- "] or [list item][list items]):"
+- "quotes] or [list item][list"
+- "[list item][list items]):"
 - "````````````````````````````````"
 - "```````````````` example"
 - "```\n.\n<pre><code></code></pre>"
@@ -2322,12 +2322,13 @@ expression: chunks
 - "<pre><code>bar\n</code></pre>"
 - "</code></pre>\n<h1>baz</h1>"
 - "````````````````````````````````"
-- "An [info string]"
+- "An [info string] can be provided"
 - can be provided after the
 - after the opening code fence.
-- "Although this spec doesn'"
-- t mandate any particular
-- any particular treatment of
+- "Although this spec doesn't"
+- "spec doesn't mandate any"
+- mandate any particular treatment
+- treatment of
 - "the info string, the first word"
 - ", the first word is typically"
 - is typically used to specify
@@ -2361,16 +2362,16 @@ expression: chunks
 - "<pre><code class=\"language-;\"></"
 - "=\"language-;\"></code></pre>"
 - "````````````````````````````````"
-- "[Info strings]"
-- for backtick code blocks cannot
+- "[Info strings] for backtick code"
+- backtick code blocks cannot
 - "blocks cannot contain backticks:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "``` aa ```\nfoo\n."
 - "foo\n.\n<p><code>aa</code>\nfoo</p>"
 - "````````````````````````````````"
-- "[Info strings]"
-- for tilde code blocks can
+- "[Info strings] for tilde code"
+- "] for tilde code blocks can"
 - code blocks can contain
 - can contain backticks and tildes
 - "and tildes:"
@@ -2381,7 +2382,7 @@ expression: chunks
 - "=\"language-aa\">foo\n</code></pre>"
 - "````````````````````````````````"
 - Closing code fences cannot have
-- "[info strings]:"
+- "cannot have [info strings]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "```\n``` aaa\n```\n."
@@ -2395,8 +2396,8 @@ expression: chunks
 - as raw HTML (and will not be
 - (and will not be escaped in HTML
 - escaped in HTML output).
-- "There are seven kinds of ["
-- "[HTML block]"
+- "There are seven kinds of [HTML"
+- "kinds of [HTML block], which can"
 - "], which can be defined by their"
 - start and end conditions.
 - The block begins with a line
@@ -2419,10 +2420,12 @@ expression: chunks
 - containing the current HTML
 - "block, if no line is encountered"
 - "is encountered that meets the ["
-- "[end condition].  If"
+- "that meets the [end condition]."
+- If
 - "the first line meets both the ["
-- "[start condition] and the [end"
-- "] and the [end\ncondition]"
+- "meets both the [start condition]"
+- "start condition] and the [end"
+- "condition], the block will"
 - ", the block will contain just"
 - contain just that line.
 - "1.  **Start condition:**"
@@ -2433,7 +2436,7 @@ expression: chunks
 - "), followed by a space,"
 - "a tab, the string `>`"
 - "`>`, or the end of the line.\\"
-- "\\\n**End condition:**"
+- "**End condition:**"
 - line contains an end tag
 - "`</pre>`, `</script>`,"
 - ", `</script>`, `</style>`, or"
@@ -2442,20 +2445,23 @@ expression: chunks
 - need not match the start tag).
 - "2.  **Start condition:**"
 - line begins with the string
-- "`<!--`.\\\n**End condition:**"
+- "`<!--`.\\"
+- "**End condition:**"
 - "line contains the string `-->`."
 - "3.  **Start condition:**"
 - "line begins with the string `<?`"
-- "`<?`.\\\n**End condition:**"
+- "`<?`.\\"
+- "**End condition:**"
 - "line contains the string `?>`."
 - "4.  **Start condition:**"
 - "line begins with the string `<!`"
 - "followed by an ASCII letter.\\"
-- "\\\n**End condition:**"
+- "**End condition:**"
 - "line contains the character `>`."
 - "5.  **Start condition:**"
 - line begins with the string
-- "`<![CDATA[`.\\\n**End condition:**"
+- "`<![CDATA[`.\\"
+- "**End condition:**"
 - "line contains the string `]]>`."
 - "6.  **Start condition:**"
 - "line begins with the string `<`"
@@ -2502,34 +2508,34 @@ expression: chunks
 - "tab, the end of the line, the"
 - "of the line, the string `>`, or"
 - "`>`, or\nthe string `/>`.\\"
-- "`/>`.\\\n**End condition:**"
-- "line is followed by a ["
-- "[blank line]."
+- "**End condition:**"
+- "line is followed by a [blank"
+- "by a [blank line]."
 - "7.  **Start condition:**"
 - "line begins with a complete ["
-- "[open tag]\n(with any [tag name]"
-- "[tag name] other than `pre`,"
+- "a complete [open tag]"
+- "(with any [tag name] other than"
 - "`pre`, `script`,\n`style`, or"
 - ",\n`style`, or `textarea`"
-- ", or `textarea`) or a complete ["
-- "[closing tag],"
+- ") or a complete [closing tag],"
 - followed by zero or more spaces
 - "or more spaces and tabs,"
 - "spaces and tabs, followed by the"
 - followed by the end of the line.
-- "\\\n**End condition:**"
-- "line is followed by a ["
-- "[blank line]."
+- "\\"
+- "**End condition:**"
+- "line is followed by a [blank"
+- "by a [blank line]."
 - HTML blocks continue until they
 - until they are closed by their
-- " closed by their appropriate\n["
-- "[end condition]"
-- ", or the last line of the"
+- closed by their appropriate
+- "[end condition], or the last"
+- "], or the last line of the"
 - last line of the document or
 - the document or other
 - "[container\nblock"
-- "block](#container-blocks)"
-- ".  This means any HTML"
+- "block](#container-blocks)."
+- This means any HTML
 - "**within an HTML\nblock**"
 - that might otherwise be
 - otherwise be recognised as a
@@ -2571,6 +2577,7 @@ expression: chunks
 - and inline and block HTML
 - and block HTML following.
 - "All types of [HTML blocks]"
+- "of [HTML blocks] except type 7"
 - "] except type 7 may interrupt"
 - a paragraph.
 - Blocks of type 7 may not
@@ -2659,8 +2666,9 @@ expression: chunks
 - "```````````````` example"
 - "<div class\nfoo\n.\n<div class\nfoo"
 - "````````````````````````````````"
-- "The initial tag doesn'"
-- "'t even need to be a valid"
+- "The initial tag doesn't even"
+- "tag doesn't even need to be a"
+- need to be a valid
 - "tag, as long as it starts like"
 - "it starts like one:"
 - "````````````````````````````````"
@@ -2706,8 +2714,8 @@ expression: chunks
 - ".\n<div></div>\n``` c\nint x = 33;"
 - "int x = 33;\n```"
 - "````````````````````````````````"
-- "To start an [HTML block]"
-- "[HTML block] with a tag that is"
+- "To start an [HTML block] with a"
+- "block] with a tag that is *not*"
 - "*not* in the"
 - "list of block-level tags in (6),"
 - "tags in (6), you must put the"
@@ -2721,7 +2729,8 @@ expression: chunks
 - ".\n<a href=\"foo\">\n*bar*\n</a>"
 - "````````````````````````````````"
 - "In type 7 blocks, the [tag name]"
-- "[tag name] can be anything:"
+- ", the [tag name] can be anything"
+- "can be anything:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "<Warning>\n*bar*\n</Warning>\n."
@@ -2743,9 +2752,9 @@ expression: chunks
 - allow us to work with tags that
 - can function as either block-
 - as either block-level or inline-
-- "level or inline-level tags.\nThe"
+- level or inline-level tags.
 - "The `<del>`"
-- tag is a nice example.
+- "`<del>` tag is a nice example."
 - We can surround content with
 - "`<del>`"
 - tags in three different ways.
@@ -2773,7 +2782,7 @@ expression: chunks
 - "</del>"
 - "````````````````````````````````"
 - "Finally, in this case, the"
-- "`<del>` tags are interpreted\nas"
+- "`<del>` tags are interpreted"
 - "as [raw HTML] *inside*"
 - the CommonMark paragraph.
 - (Because
@@ -2859,8 +2868,9 @@ expression: chunks
 - will end at the
 - end of the document (or the
 - "document (or the enclosing ["
-- "[block quote][block quotes]\nor ["
-- "]\nor [list item][list items]):"
+- "the enclosing [block quote]["
+- "[block quote][block quotes]"
+- "or [list item][list items]):"
 - "````````````````````````````````"
 - "```````````````` example"
 - "<style\n  type=\"text/css\">\n\nfoo\n."
@@ -2900,7 +2910,7 @@ expression: chunks
 - Note that anything on the last
 - on the last line after the
 - end tag will be included in the
-- "[HTML block]:"
+- "included in the [HTML block]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "<script>\nfoo\n</script>1. *bar*\n."
@@ -2960,8 +2970,9 @@ expression: chunks
 - ".\n  <div>\n<pre><code>&lt;div&gt;"
 - "</code></pre>"
 - "````````````````````````````````"
-- An HTML block of types 1--
-- "6 can interrupt a paragraph, and"
+- An HTML block of types 1--6 can
+- types 1--6 can interrupt a
+- "can interrupt a paragraph, and"
 - "a paragraph, and need not be"
 - preceded by a blank line.
 - "````````````````````````````````"
@@ -2976,7 +2987,7 @@ expression: chunks
 - "a document, and except for"
 - ", and except for blocks of types"
 - "blocks of types 1--5, [above]["
-- "--5, [above][HTML\nblock]:"
+- " 1--5, [above][HTML\nblock]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "<div>\nbar\n</div>\n*foo*\n.\n<div>"
@@ -2992,8 +3003,8 @@ expression: chunks
 - "<a href=\"bar\">\nbaz</p>"
 - "````````````````````````````````"
 - This rule differs from John
-- "from John Gruber'"
-- "'s original Markdown syntax"
+- "from John Gruber's original"
+- original Markdown syntax
 - "specification, which says:"
 - ">"
 - The only restrictions are that
@@ -3010,30 +3021,31 @@ expression: chunks
 - block should not be indented
 - not be indented with spaces or
 - with spaces or tabs.
-- "In some ways Gruber'"
-- s rule is more restrictive than
+- "In some ways Gruber's rule is"
+- "Gruber's rule is more"
+- rule is more restrictive than
 - restrictive than the one given
 - "here:"
-- "-"
-- It requires that an HTML block
+- "- It requires that an HTML block"
 - an HTML block be preceded by a
 - be preceded by a blank line.
-- "-"
-- It does not allow the start tag
-- the start tag to be indented.
-- "-"
-- "It requires a matching end tag,"
-- "end tag, which it also does not"
-- it also does not allow to
+- "- It does not allow the start"
+- allow the start tag to be
+- start tag to be indented.
+- "- It requires a matching end tag"
+- "matching end tag, which it also"
+- ", which it also does not allow"
+- does not allow to
 - be indented.
 - Most Markdown implementations (
-- "(including some of Gruber'"
-- "'s own) do not"
+- "(including some of Gruber's own)"
+- "of Gruber's own) do not"
 - respect all of these
 - all of these restrictions.
 - "There is one respect, however,"
-- ", however, in which Gruber'"
-- "'s rule is more liberal"
+- ", however, in which Gruber's"
+- "which Gruber's rule is more"
+- rule is more liberal
 - "than the one given here, since"
 - "here, since it allows blank"
 - it allows blank lines to occur
@@ -3080,8 +3092,7 @@ expression: chunks
 - interpreting content inside tags
 - inside tags as text if the open
 - text if the open tag has
-- "the attribute `markdown=1`"
-- "."
+- "the attribute `markdown=1`."
 - The rule given above seems a
 - above seems a simpler and
 - more elegant way of achieving
@@ -3130,35 +3141,36 @@ expression: chunks
 - "Fortunately, blank lines are"
 - blank lines are usually not
 - are usually not necessary and
-- necessary and can be
-- deleted.
+- " necessary and can be\ndeleted."
 - "The exception is inside `<pre>`"
-- "`<pre>` tags, but as described\n["
-- "[above][HTML blocks]"
+- "`<pre>` tags, but as described"
+- "[above][HTML blocks], raw HTML"
 - "], raw HTML blocks starting with"
 - "`<pre>`\n*can*"
 - "*can* contain blank lines."
 - "## Link reference definitions"
 - "A [link reference definition](@)"
-- "consists of a [link label]"
-- ", optionally preceded by up to"
+- "consists of a [link label],"
+- "a [link label], optionally"
+- "], optionally preceded by up to"
 - by up to three spaces of
 - "indentation, followed"
 - "by a colon (`:`"
 - "), optional spaces or tabs ("
 - spaces or tabs (including up to
-- "(including up to one\n["
-- "[line ending]), a ["
+- (including up to one
+- "[line ending]), a [link"
 - "]), a [link destination],"
 - optional spaces or tabs (
 - spaces or tabs (including up to
-- " (including up to one\n["
+- (including up to one
 - "[line ending]), and an optional"
-- "[link\ntitle]"
-- ", which if it is present must be"
+- "and an optional [link"
+- "title], which if it is present"
+- if it is present must be
 - present must be separated
-- "from the [link destination]"
-- "] by spaces or tabs."
+- "from the [link destination] by"
+- "destination] by spaces or tabs."
 - No further character may occur.
 - "A [link reference definition]"
 - does not correspond to a
@@ -3167,14 +3179,16 @@ expression: chunks
 - element of a document.
 - "Instead, it"
 - defines a label which can be
-- "which can be used in ["
-- "[reference links]"
-- "]\nand reference-style [images]"
-- "] elsewhere in the document.  ["
-- "[Link\nreference definitions]"
-- can come either before or after
-- before or after the links that
-- " the links that use\nthem."
+- "which can be used in [reference"
+- "in [reference links]"
+- "and reference-style [images]"
+- "-style [images] elsewhere in the"
+- elsewhere in the document.
+- "[Link"
+- "reference definitions] can come"
+- "] can come either before or"
+- either before or after the links
+- " after the links that use\nthem."
 - "````````````````````````````````"
 - "```````````````` example"
 - "[foo]: /url \"title\"\n\n[foo]\n."
@@ -3217,7 +3231,7 @@ expression: chunks
 - "title\nline1\nline2\n\">foo</a></p>"
 - "````````````````````````````````"
 - "However, it may not contain a ["
-- "[blank line]:"
+- "not contain a [blank line]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "[foo]: /url 'title"
@@ -3291,9 +3305,10 @@ expression: chunks
 - ".\n<p><a href=\"first\">foo</a></p>"
 - "````````````````````````````````"
 - "As noted in the section on ["
-- "[Links], matching of labels is"
-- "case-insensitive (see [matches]"
-- "[matches])."
+- "the section on [Links], matching"
+- "Links], matching of labels is"
+- "case-insensitive (see [matches])"
+- "(see [matches])."
 - "````````````````````````````````"
 - "```````````````` example"
 - "[FOO]: /url\n\n[Foo]\n."
@@ -3305,8 +3320,9 @@ expression: chunks
 - "<p><a href=\"/%CF%86%CE%BF%CF%85\""
 - "%86%CE%BF%CF%85\">αγω</a></p>"
 - "````````````````````````````````"
-- "Whether something is a ["
-- "[link reference definition] is"
+- "Whether something is a [link"
+- "is a [link reference definition]"
+- "definition] is"
 - independent of whether the link
 - whether the link reference it
 - reference it defines is
@@ -3368,7 +3384,8 @@ expression: chunks
 - "</code></pre>\n<p>[foo]</p>"
 - "````````````````````````````````"
 - "A [link reference definition]"
-- "] cannot interrupt a paragraph."
+- "definition] cannot interrupt a"
+- interrupt a paragraph.
 - "````````````````````````````````"
 - "```````````````` example"
 - "Foo\n[bar]: /baz\n\n[bar]\n.\n<p>Foo"
@@ -3400,7 +3417,7 @@ expression: chunks
 - "[foo]: /url\n===\n[foo]\n.\n<p>==="
 - "<a href=\"/url\">foo</a></p>"
 - "````````````````````````````````"
-- "Several ["
+- "Several [link reference"
 - "[link reference definitions]"
 - "can occur one after another,"
 - "after another, without"
@@ -3418,8 +3435,8 @@ expression: chunks
 - "\" title=\"bar\">bar</a>,"
 - "<a href=\"/baz-url\">baz</a></p>"
 - "````````````````````````````````"
-- "[Link reference definitions]"
-- "] can occur"
+- "[Link reference definitions] can"
+- "definitions] can occur"
 - "inside block containers, like"
 - "containers, like lists and block"
 - lists and block quotations.
@@ -3444,8 +3461,8 @@ expression: chunks
 - The contents of the paragraph
 - of the paragraph are the result
 - are the result of parsing the
-- "paragraph'"
-- s raw content as inlines.
+- "paragraph's raw content as"
+- raw content as inlines.
 - "The paragraph's raw content"
 - is formed by concatenating the
 - the lines and removing initial
@@ -3514,21 +3531,21 @@ expression: chunks
 - "inline parsing, so a paragraph"
 - that ends with two or more
 - with two or more spaces will not
-- "spaces will not end with a ["
-- "[hard line\nbreak]:"
+- "spaces will not end with a [hard"
+- "end with a [hard line\nbreak]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "aaa     \nbbb     \n.\n<p>aaa<br />"
 - ".\n<p>aaa<br />\nbbb</p>"
 - "````````````````````````````````"
 - "## Blank lines"
-- "[Blank lines]"
-- between block-level elements are
-- "elements are ignored,"
+- "[Blank lines] between block-"
+- "] between block-level elements"
+- "-level elements are ignored,"
 - except for the role they play in
 - they play in determining whether
-- " whether a [list]\nis [tight] or"
-- "]\nis [tight] or [loose]."
+- "whether a [list]"
+- "is [tight] or [loose]."
 - Blank lines at the beginning and
 - beginning and end of the
 - and end of the document are also
@@ -3548,9 +3565,8 @@ expression: chunks
 - There are two basic kinds of
 - "basic kinds of container blocks:"
 - "[block quotes] and [list items]."
-- "[list items].\n[Lists]"
 - "[Lists] are meta-containers for"
-- "[list items]."
+- "-containers for [list items]."
 - We define the syntax for
 - the syntax for container blocks
 - container blocks recursively.
@@ -3570,13 +3586,12 @@ expression: chunks
 - a block quote or list item by
 - or list item by explaining
 - how these can be *generated*
-- from their contents.
+- "*generated* from their contents."
 - This should suffice
 - "to define the syntax, although"
 - "syntax, although it does not"
 - it does not give a recipe for
-- "*parsing*"
-- these constructions.
+- "*parsing*\nthese constructions."
 - (A recipe is provided below in
 - below in the section entitled
 - "[A parsing strategy](#appendix-a"
@@ -3596,16 +3611,15 @@ expression: chunks
 - "`>` not followed by a space of"
 - indentation.
 - "The following rules define ["
-- "[block quotes]:"
+- "rules define [block quotes]:"
 - 1.  **Basic case.**
 - If a string of lines *Ls*
 - "*Ls* constitute a sequence"
 - of blocks *Bs*
 - ", then the result of prepending"
 - "of prepending a [block quote"
-- "[block quote\n    marker]"
-- to the beginning of each line in
-- "*Ls*\n    is a"
+- "marker] to the beginning of each"
+- " of each line in *Ls*\n    is a"
 - "[block quote](#block-quotes)"
 - containing *Bs*.
 - 2.  **Laziness.**
@@ -3615,12 +3629,13 @@ expression: chunks
 - with contents *Bs*
 - ", then the result of deleting"
 - "the initial [block quote marker]"
-- "] from one or"
+- "quote marker] from one or"
 - more lines in which the next
 - which the next character other
 - character other than a space or
 - than a space or tab after the
 - "[block quote marker] is ["
+- "marker] is [paragraph"
 - "] is [paragraph continuation"
 - "text] is a block quote with *Bs*"
 - "*Bs* as its content."
@@ -3634,9 +3649,10 @@ expression: chunks
 - the beginning of the paragraph.
 - 3.  **Consecutiveness.**
 - "A document cannot contain two ["
-- "[block\n    quotes]"
-- "] in a row unless there is a ["
-- "[blank line] between them."
+- "contain two [block"
+- "quotes] in a row unless there is"
+- "unless there is a [blank line]"
+- "a [blank line] between them."
 - Nothing else counts as a
 - "[block quote](#block-quotes)."
 - "Here is a simple example:"
@@ -3680,7 +3696,6 @@ expression: chunks
 - "````````````````````````````````"
 - The Laziness clause allows us to
 - "allows us to omit the `>` before"
-- "`>` before\n["
 - "[paragraph continuation text]:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -3705,8 +3720,9 @@ expression: chunks
 - would have been continuations of
 - paragraphs had they been
 - "had they been prepended with ["
+- "prepended with [block quote"
 - "[block quote markers]."
-- "].\nFor example, the `> `"
+- "For example, the `> `"
 - cannot be omitted in the second
 - in the second line of
 - "``` markdown\n> foo\n> ---\n```"
@@ -3730,8 +3746,9 @@ expression: chunks
 - "</blockquote>\n<ul>\n<li>bar</li>"
 - "<li>bar</li>\n</ul>"
 - "````````````````````````````````"
-- "For the same reason, we can'"
-- "'t omit the `> ` in front of"
+- "For the same reason, we can't"
+- "reason, we can't omit the `> `"
+- "`> ` in front of"
 - subsequent lines of an indented
 - of an indented or fenced code
 - "or fenced code block:"
@@ -3753,7 +3770,7 @@ expression: chunks
 - "````````````````````````````````"
 - "Note that in the following case,"
 - "following case, we have a [lazy"
-- "[lazy\ncontinuation line]:"
+- "continuation line]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "> foo\n    - bar\n.\n<blockquote>"
@@ -3770,7 +3787,9 @@ expression: chunks
 - code block because indented code
 - indented code blocks cannot
 - "interrupt paragraphs, so it is ["
-- "[paragraph continuation text]."
+- ", so it is [paragraph"
+- "it is [paragraph continuation"
+- "continuation text]."
 - "A block quote can be empty:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -3805,7 +3824,7 @@ expression: chunks
 - current Markdown implementations
 - "implementations, including John"
 - ", including John Gruber's"
-- "'s\noriginal `Markdown.pl`"
+- "original `Markdown.pl`"
 - ", will parse this example as a"
 - example as a single block quote
 - with two paragraphs.
@@ -3907,12 +3926,13 @@ expression: chunks
 - When including an indented code
 - an indented code block in a
 - "code block in a block quote,"
-- "remember that the ["
-- "[block quote marker] includes"
-- "] includes\nboth the `>`"
+- "remember that the [block quote"
+- "the [block quote marker]"
+- " quote marker] includes\nboth the"
+- "both the `>`"
 - and a following space of
-- space of indentation.  So
-- "*five spaces* are needed"
+- space of indentation.
+- So *five spaces* are needed
 - " are needed\nafter the `>`:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -3926,25 +3946,26 @@ expression: chunks
 - "<p>not code</p>\n</blockquote>"
 - "````````````````````````````````"
 - "## List items"
-- "A [list marker](@) is a\n["
-- " is a\n[bullet list marker] or an"
-- "] or an [ordered list marker]."
+- "A [list marker](@) is a"
+- "[bullet list marker] or an ["
+- "marker] or an [ordered list"
+- "an [ordered list marker]."
 - "A [bullet list marker](@)\nis a"
 - "is a `-`, `+`, or `*` character."
 - "An [ordered list marker](@)"
-- is a sequence of 1--
-- "--9 arabic digits (`0-9`"
+- is a sequence of 1--9 arabic
+- "of 1--9 arabic digits (`0-9`"
 - "`0-9`), followed by either a\n`.`"
 - "`.` character or a `)`"
-- character.
+- "`)` character."
 - (The reason for the length
 - limit is that with 10 digits we
 - 10 digits we start seeing
 - we start seeing integer
 - seeing integer overflows
 - in some browsers.)
-- "The following rules define ["
-- "[list items]:"
+- "The following rules define [list"
+- "define [list items]:"
 - 1.  **Basic case.**
 - If a sequence of lines *Ls*
 - "*Ls* constitute a sequence of"
@@ -3965,7 +3986,7 @@ expression: chunks
 - "*Ls* by *W + N* spaces, is a"
 - " spaces, is a\n    list item with"
 - list item with *Bs*
-- as its contents.
+- "*Bs* as its contents."
 - The type of the list item
 - (bullet or ordered) is
 - or ordered) is determined by the
@@ -3976,22 +3997,23 @@ expression: chunks
 - "number, based on the ordered"
 - on the ordered list marker.
 - "Exceptions:"
-- 1. When the first list item in a
-- "[list] interrupts"
-- "] interrupts\n       a paragraph"
-- a paragraph---
+- "1."
+- "When the first list item in a ["
+- "list item in a [list] interrupts"
+- "a paragraph---that is, when it"
 - "that is, when it starts on a"
 - it starts on a line that would
-- "otherwise count as ["
-- "[paragraph continuation text]---"
-- "]---then (a)\n       the lines"
+- "otherwise count as [paragraph"
+- "as [paragraph continuation text]"
+- "text]---then (a)"
 - the lines *Ls*
 - must not begin with a blank line
 - "a blank line, and (b) if"
 - "the list item is ordered, the"
 - "is ordered, the start number"
 - the start number must be 1.
-- "2. If any line is a ["
+- "2."
+- "If any line is a [thematic break"
 - "[thematic break][thematic breaks"
 - "[thematic breaks] then"
 - that line is not a list item.
@@ -4010,8 +4032,8 @@ expression: chunks
 - "</blockquote>"
 - "````````````````````````````````"
 - "And let *M* be the marker `1.`"
-- "`1.`, and *N*"
-- "*N* = 2.  Then rule #1 says"
+- "`1.`, and *N* = 2."
+- "Then rule #1 says"
 - that the following is an ordered
 - is an ordered list item with
 - "list item with start number 1,"
@@ -4236,8 +4258,9 @@ expression: chunks
 - "-1. not ok\n.\n<p>-1. not ok</p>"
 - "````````````````````````````````"
 - "2."
-- "**Item starting with indented"
-- with indented code.**
+- "**"
+- Item starting with indented code
+- indented code.**
 - If a sequence of lines *Ls*
 - constitute a sequence of blocks
 - "*Bs*"
@@ -4396,12 +4419,14 @@ expression: chunks
 - "<p>bar</p>\n</li>\n</ul>"
 - "````````````````````````````````"
 - "3."
-- "**Item starting with a blank"
-- with a blank line.**
+- "**"
+- Item starting with a blank line.
+- "**"
 - If a sequence of lines *Ls*
-- "*Ls*\n    starting with a single"
-- "[blank line]"
-- "] constitute a (possibly empty)"
+- "starting with a single [blank"
+- "a single [blank line] constitute"
+- "line] constitute a (possibly"
+- a (possibly empty)
 - "sequence of blocks *Bs*, and *M*"
 - "*M* is a list marker of width"
 - "*W*,"
@@ -4445,8 +4470,9 @@ expression: chunks
 - When the list item starts with a
 - "starts with a blank line, the"
 - "blank line, the number of spaces"
-- "following the list marker doesn'"
-- t change the required
+- following the list marker
+- "the list marker doesn't change"
+- "doesn't change the required"
 - "the required indentation:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -4476,7 +4502,7 @@ expression: chunks
 - It does not matter whether there
 - whether there are spaces or tabs
 - "spaces or tabs following the ["
-- "[list marker]:"
+- "following the [list marker]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "- foo\n-   \n- bar\n.\n<ul>"
@@ -4594,15 +4620,15 @@ expression: chunks
 - next character other than a
 - other than a space or tab after
 - or tab after the indentation is
-- "[paragraph continuation text]"
-- "] is a"
+- "[paragraph continuation text] is"
+- "text] is a"
 - list item with the same contents
 - same contents and attributes.
 - The unindented
 - lines are called
 - "[lazy continuation line](@)s."
-- "Here is an example with ["
-- "[lazy continuation lines]:"
+- "Here is an example with [lazy"
+- "with [lazy continuation lines]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - 1.  A paragraph
@@ -4654,14 +4680,13 @@ expression: chunks
 - "6.  **That's all.**"
 - Nothing that is not counted as a
 - not counted as a list item by
-- " a list item by rules\n    #1--"
+- a list item by rules
 - "#1--5 counts as a"
 - "[list item](#list-items)."
 - The rules for sublists follow
 - sublists follow from the general
-- "from the general rules\n[above]["
-- "[above][List items]"
-- "."
+- from the general rules
+- "[above][List items]."
 - A sublist must be indented the
 - be indented the same number
 - of spaces of indentation a
@@ -4739,26 +4764,26 @@ expression: chunks
 - "baz</li>\n</ul>"
 - "````````````````````````````````"
 - "### Motivation"
-- "John Gruber'"
-- s Markdown spec says the
+- "John Gruber's Markdown spec says"
 - spec says the following about
 - "following about list items:"
-- "1. \""
-- List markers typically start at
+- "1."
+- "\"List markers typically start at"
 - "start at the left margin, but"
 - "left margin, but may be indented"
 - by up to three spaces.
 - List markers must be followed by
 - be followed by one or more
 - "spaces or a tab.\""
-- "2. \""
-- "To make lists look nice, you can"
-- "nice, you can wrap items with"
-- wrap items with hanging indents
-- "....\n   But if you don'"
-- "'t want to, you don't have to.\""
-- "3. \""
-- List items may consist of
+- "2."
+- "\"To make lists look nice, you"
+- "look nice, you can wrap items"
+- can wrap items with hanging
+- with hanging indents....
+- "But if you don't want to, you"
+- "want to, you don't have to.\""
+- "3."
+- "\"List items may consist of"
 - may consist of multiple
 - of multiple paragraphs.
 - Each subsequent
@@ -4766,22 +4791,22 @@ expression: chunks
 - item must be indented by either
 - by either 4 spaces or one
 - "tab.\""
-- "4. \""
-- It looks nice if you indent
+- "4."
+- "\"It looks nice if you indent"
 - if you indent every line of the
 - line of the subsequent
 - "the subsequent paragraphs,"
 - "but here again, Markdown will"
 - ", Markdown will allow you to be"
 - "allow you to be lazy.\""
-- "5. \""
-- To put a blockquote within a
+- "5."
+- "\"To put a blockquote within a"
 - "within a list item, the"
 - "a list item, the blockquote's"
-- "'s `>`"
+- "`>`"
 - "delimiters need to be indented.\""
-- "6. \""
-- To put a code block within a
+- "6."
+- "\"To put a code block within a"
 - "block within a list item, the"
 - "a list item, the code block"
 - ", the code block needs to be"
@@ -4828,8 +4853,8 @@ expression: chunks
 - "implementation `Markdown.pl`"
 - "had followed it, it probably"
 - "it, it probably would have"
-- "become the standard.  However,"
-- "`Markdown.pl`"
+- become the standard.
+- "However, `Markdown.pl`"
 - allowed paragraphs and
 - sublists to start with only two
 - with only two spaces indentation
@@ -4852,14 +4877,14 @@ expression: chunks
 - determining what comes under a
 - comes under a list item.
 - "(Pandoc and python-Markdown,"
-- "for example, stuck with Gruber'"
-- s syntax description and the
-- and the four-space
+- "for example, stuck with Gruber's"
+- "with Gruber's syntax description"
+- description and the four-space
 - "rule, while discount, redcarpet,"
 - ", redcarpet, marked, PHP"
 - ", marked, PHP Markdown, and"
 - " Markdown, and others\nfollowed"
-- "followed `Markdown.pl`'"
+- "followed `Markdown.pl`"
 - "'s behavior more closely.)"
 - "Unfortunately, given the"
 - ", given the divergences between"
@@ -5006,7 +5031,8 @@ expression: chunks
 - code would have to be indented
 - to be indented six spaces after
 - six spaces after the list marker
-- the list marker.  And this
+- the list marker.
+- And this
 - would break a lot of existing
 - "lot of existing Markdown, which"
 - "Markdown, which has the pattern:"
@@ -5019,19 +5045,19 @@ expression: chunks
 - ", by contrast, will"
 - "parse this text as expected,"
 - "as expected, since the code"
-- ", since the code block'"
-- "'s indentation is measured"
+- ", since the code block's"
+- "the code block's indentation is"
+- indentation is measured
 - "from the beginning of `foo`."
 - The one case that needs special
 - needs special treatment is a
 - treatment is a list item that
-- "*starts*"
-- with indented code.
+- "*starts*\nwith indented code."
 - How much indentation is required
 - "is required in that case, since"
 - "we don't have a \"first paragraph"
-- "\"first paragraph\""
-- to measure from?
+- "\"first paragraph\" to measure"
+- "\" to measure from?"
 - "Rule #2 simply stipulates"
 - "that in such cases, we require"
 - ", we require one space"
@@ -5051,14 +5077,15 @@ expression: chunks
 - "## Lists"
 - "A [list](@)"
 - is a sequence of one or more
-- "list items [of the same type]"
-- "].  The list items"
+- "list items [of the same type]."
+- The list items
 - may be separated by any number
 - by any number of blank lines.
 - Two list items are
 - "[of the same type](@)"
-- "if they begin with a ["
-- "[list marker] of the same type."
+- "if they begin with a [list"
+- "with a [list marker] of the same"
+- "] of the same type."
 - Two list markers are of the
 - same type if (a) they are bullet
 - they are bullet list markers
@@ -5071,14 +5098,15 @@ expression: chunks
 - "delimiter (either `.` or `)`)."
 - "A list is an [ordered list](@)"
 - if its constituent list items
-- " list items begin with\n["
+- list items begin with
 - "[ordered list markers], and a"
-- "], and a\n[bullet list](@)"
+- "[bullet list](@)"
 - if its constituent list
-- "items begin with ["
+- "items begin with [bullet list"
 - "[bullet list markers]."
-- "The [start number](@)\nof an ["
-- "of an [ordered list]"
+- "The [start number](@)"
+- "of an [ordered list] is"
+- "ordered list] is determined by"
 - is determined by the list number
 - the list number of
 - its initial list item.
@@ -5094,8 +5122,7 @@ expression: chunks
 - list items directly contain two
 - contain two block-level elements
 - "-level elements with a blank"
-- with a blank line
-- between them.
+- " with a blank line\nbetween them."
 - "Otherwise a list is [tight](@)."
 - (The difference in HTML output
 - in HTML output is that
@@ -5182,9 +5209,9 @@ expression: chunks
 - container block (such as a list
 - (such as a list item or
 - a list item or blockquote).
-- "(Indeed, the spec for ["
-- "[list items] and [block quotes]"
-- "[block quotes] presupposes"
+- "(Indeed, the spec for [list"
+- "spec for [list items] and [block"
+- "] and [block quotes] presupposes"
 - this principle.)
 - This principle implies that if
 - "``` markdown"
@@ -5199,8 +5226,8 @@ expression: chunks
 - agree it is (though the
 - is (though the paragraph
 - "may be rendered without `<p>`"
-- "`<p>` tags, since the list is \""
-- "\"tight\"),\nthen"
+- "tags, since the list is \"tight\")"
+- " list is \"tight\"),\nthen"
 - "``` markdown"
 - "I need to buy\n- new shoes"
 - "- new shoes\n- a coat"
@@ -5214,8 +5241,8 @@ expression: chunks
 - to allow lists to
 - interrupt paragraphs inside list
 - "inside list items, the ["
-- "[principle of\nuniformity]"
-- requires us to allow this
+- "items, the [principle of"
+- "uniformity] requires us to allow"
 - us to allow this outside list
 - " outside list items as\nwell.  ("
 - "[reStructuredText](https://"
@@ -5231,7 +5258,8 @@ expression: chunks
 - "hard-wrapped numerals, we allow"
 - ", we allow only lists starting"
 - "lists starting with `1` to"
-- " to\ninterrupt paragraphs.  Thus,"
+- "`1` to\ninterrupt paragraphs."
+- "Thus,"
 - "````````````````````````````````"
 - "```````````````` example"
 - The number of windows in my
@@ -5564,17 +5592,17 @@ expression: chunks
 - "these two backtick strings,"
 - "strings, normalized in the"
 - "following ways:"
-- "- First, [line endings]"
-- "[line endings] are converted to"
-- "are converted to [spaces]."
-- "-"
-- If the resulting string both
+- "- First, [line endings] are"
+- "endings] are converted to ["
+- "converted to [spaces]."
+- "- If the resulting string both"
 - string both begins *and*
 - "*and* ends with a [space]"
 - "character, but does not consist"
 - "does not consist entirely of ["
-- "[space]\n  characters, a single ["
-- "[space]"
+- "entirely of [space]"
+- "characters, a single [space]"
+- "a single [space] character is"
 - "] character is removed from the"
 - front and back.
 - This allows you to include code
@@ -5627,9 +5655,9 @@ expression: chunks
 - "```````````````` example"
 - "` a`\n.\n<p><code> a</code></p>"
 - "````````````````````````````````"
-- "Only [spaces], and not ["
-- "], and not [unicode whitespace]"
-- "] in general, are"
+- "Only [spaces], and not [unicode"
+- "and not [unicode whitespace] in"
+- "whitespace] in general, are"
 - "stripped in this way:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -5643,8 +5671,8 @@ expression: chunks
 - "` `\n`  `\n.\n<p><code> </code>"
 - "<code>  </code></p>"
 - "````````````````````````````````"
-- "[Line endings]"
-- "] are treated like spaces:"
+- "[Line endings] are treated like"
+- "are treated like spaces:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "``\nfoo\nbar  \nbaz\n``\n."
@@ -5787,14 +5815,15 @@ expression: chunks
 - "](https://daringfireball.net/"
 - "/projects/markdown/syntax#em)"
 - "says:"
-- "> Markdown treats asterisks (`*`"
+- ">"
+- "Markdown treats asterisks (`*`"
 - "`*`) and underscores (`_`"
 - "`_`) as indicators of\n>"
-- emphasis. Text wrapped with one
-- "`*` or `_`"
+- "> emphasis."
+- "Text wrapped with one `*` or `_`"
 - "`_` will be wrapped with an HTML"
 - "> `<em>` tag; double `*`'s or"
-- "`*`'s or `_`'"
+- "`*`'s or `_`"
 - "'s will be wrapped with an HTML"
 - "`<strong>`\n> tag."
 - "This is enough for most users,"
@@ -5803,8 +5832,8 @@ expression: chunks
 - "rules leave much undecided,"
 - especially when it comes to
 - when it comes to nested emphasis
-- nested emphasis.  The original
-- "`Markdown.pl`"
+- nested emphasis.
+- "The original\n`Markdown.pl`"
 - test suite makes it clear that
 - "it clear that triple `***` and"
 - "`***` and\n`___`"
@@ -5852,8 +5881,8 @@ expression: chunks
 - for efficient parsing strategies
 - strategies that do not backtrack
 - do not backtrack.
-- "First, some definitions.  A"
-- "[delimiter run](@) is either"
+- "First, some definitions."
+- "A [delimiter run](@) is either"
 - "a sequence of one or more `*`"
 - characters that is not preceded
 - is not preceded or
@@ -5867,18 +5896,22 @@ expression: chunks
 - "`_` character."
 - A
 - "[left-flanking delimiter run](@)"
-- " is\na [delimiter run]"
-- "] that is (1) not followed by ["
-- "[Unicode whitespace],"
+- is
+- "a [delimiter run] that is (1)"
+- "run] that is (1) not followed by"
+- "not followed by [Unicode"
+- "by [Unicode whitespace],"
 - and either (2a) not followed by
-- "not followed by a ["
-- "[Unicode punctuation character]"
-- "], or\n(2b) followed by a ["
-- "[Unicode punctuation character]"
-- "] and\npreceded by ["
+- "not followed by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character], or"
+- "(2b) followed by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character] and"
 - "preceded by [Unicode whitespace]"
-- "] or a ["
-- "[Unicode punctuation character]."
+- "whitespace] or a [Unicode"
+- "] or a [Unicode punctuation"
+- "punctuation character]."
 - "For purposes of this definition,"
 - "this definition, the beginning"
 - ", the beginning and the end of"
@@ -5886,19 +5919,22 @@ expression: chunks
 - count as Unicode whitespace.
 - A
 - "[right-flanking delimiter run](@"
-- "delimiter run](@) is\na ["
-- " is\na [delimiter run]"
-- "] that is (1) not preceded by ["
-- "[Unicode whitespace],"
+- "delimiter run](@) is"
+- "a [delimiter run] that is (1)"
+- "run] that is (1) not preceded by"
+- "not preceded by [Unicode"
+- "by [Unicode whitespace],"
 - and either (2a) not preceded by
-- "not preceded by a ["
-- "[Unicode punctuation character]"
-- "], or\n(2b) preceded by a ["
-- "[Unicode punctuation character]"
-- "] and\nfollowed by ["
+- "not preceded by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character], or"
+- "(2b) preceded by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character] and"
 - "followed by [Unicode whitespace]"
-- "] or a ["
-- "[Unicode punctuation character]."
+- "whitespace] or a [Unicode"
+- "] or a [Unicode punctuation"
+- "punctuation character]."
 - "For purposes of this definition,"
 - "this definition, the beginning"
 - ", the beginning and the end of"
@@ -5906,14 +5942,12 @@ expression: chunks
 - count as Unicode whitespace.
 - Here are some examples of
 - some examples of delimiter runs.
-- "-"
-- left-flanking but not right-
+- "- left-flanking but not right-"
 - "but not right-flanking:"
 - "```\n    ***abc\n      _abc"
 - "      _abc\n    **\"abc\""
 - "    **\"abc\"\n     _\"abc\"\n    ```"
-- "-"
-- right-flanking but not left-
+- "- right-flanking but not left-"
 - "but not left-flanking:"
 - "```\n     abc***\n     abc_"
 - "     abc_\n    \"abc\"**\n    \"abc\"_"
@@ -5922,18 +5956,18 @@ expression: chunks
 - "    ```\n     abc***def"
 - " abc***def\n    \"abc\"_\"def\""
 - "    \"abc\"_\"def\"\n    ```"
-- "-"
-- "Neither left nor right-flanking:"
-- "    ```\n    abc *** def"
-- "abc *** def\n    a _ b\n    ```"
+- "- Neither left nor right-"
+- "left nor right-flanking:"
+- "```\n    abc *** def\n    a _ b"
+- "    a _ b\n    ```"
 - (The idea of distinguishing left
 - left-flanking and right-flanking
 - delimiter runs based on the
 - based on the character before
 - character before and the
 - before and the character
-- after comes from Roopesh Chander
-- "'s"
+- after comes from Roopesh
+- "from Roopesh Chander's"
 - "[vfmd](https://web.archive.org/"
 - web.archive.org/web/
 - "/web/20220608143320/http://"
@@ -5942,10 +5976,12 @@ expression: chunks
 - "/specification/#procedure-for-"
 - "/#procedure-for-identifying-"
 - for-identifying-emphasis-tags).
-- ".\nvfmd uses the terminology \""
-- "\"emphasis indicator string\""
-- "\" instead of \"delimiter\nrun,\""
-- and its rules for distinguishing
+- "vfmd uses the terminology \""
+- "terminology \"emphasis indicator"
+- "indicator string\" instead of \""
+- "\" instead of \"delimiter"
+- "run,\" and its rules for"
+- its rules for distinguishing
 - distinguishing left- and right-
 - left- and right-flanking runs
 - are a bit more complex than the
@@ -5957,74 +5993,90 @@ expression: chunks
 - "1.  A single `*` character"
 - "character [can open emphasis](@)"
 - iff (if and only if) it is part
-- "if) it is part of a ["
-- "[left-flanking delimiter run]."
-- "2.  A single `_` character ["
-- "`_` character [can open emphasis"
-- "] iff\n    it is part of a ["
-- "[left-flanking delimiter run]"
+- "if) it is part of a [left-"
+- "part of a [left-flanking"
+- "a [left-flanking delimiter run]."
+- "2.  A single `_`"
+- "character [can open emphasis]"
+- "open emphasis] iff"
+- "it is part of a [left-flanking"
+- "a [left-flanking delimiter run]"
 - "and either (a) not part of a ["
+- "not part of a [right-flanking"
 - "[right-flanking delimiter run]"
-- "]\n    or (b) part of a ["
+- "or (b) part of a [right-flanking"
 - "[right-flanking delimiter run]"
-- "]\n    preceded by a ["
-- "[Unicode punctuation character]."
+- "preceded by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character]."
 - "3.  A single `*` character"
 - "[can close emphasis](@)"
-- "iff it is part of a ["
-- "[right-flanking delimiter run]."
-- "4.  A single `_` character ["
+- "iff it is part of a [right-"
+- "of a [right-flanking delimiter"
+- "delimiter run]."
+- "4.  A single `_`"
 - "character [can close emphasis]"
-- "] iff\n    it is part of a ["
+- "close emphasis] iff"
+- "it is part of a [right-flanking"
 - "[right-flanking delimiter run]"
 - "and either (a) not part of a ["
-- "[left-flanking delimiter run]"
-- "]\n    or (b) part of a ["
-- "[left-flanking delimiter run]"
-- "]\n    followed by a ["
-- "[Unicode punctuation character]."
+- "not part of a [left-flanking"
+- "a [left-flanking delimiter run]"
+- "or (b) part of a [left-flanking"
+- "a [left-flanking delimiter run]"
+- "followed by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character]."
 - "5.  A double `**`"
 - "[can open strong emphasis](@)"
-- "iff it is part of a ["
-- "[left-flanking delimiter run]."
-- "6.  A double `__` ["
-- "`__` [can open strong emphasis]"
-- "] iff\n    it is part of a ["
-- "[left-flanking delimiter run]"
+- "iff it is part of a [left-"
+- "part of a [left-flanking"
+- "a [left-flanking delimiter run]."
+- "6.  A double `__`"
+- "[can open strong emphasis] iff"
+- "it is part of a [left-flanking"
+- "a [left-flanking delimiter run]"
 - "and either (a) not part of a ["
+- "not part of a [right-flanking"
 - "[right-flanking delimiter run]"
-- "]\n    or (b) part of a ["
+- "or (b) part of a [right-flanking"
 - "[right-flanking delimiter run]"
-- "]\n    preceded by a ["
-- "[Unicode punctuation character]."
+- "preceded by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character]."
 - "7.  A double `**`"
 - "[can close strong emphasis](@)"
-- "iff it is part of a ["
-- "[right-flanking delimiter run]."
-- "8.  A double `__` ["
-- "`__` [can close strong emphasis]"
-- "] iff\n    it is part of a ["
+- "iff it is part of a [right-"
+- "of a [right-flanking delimiter"
+- "delimiter run]."
+- "8.  A double `__`"
+- "[can close strong emphasis] iff"
+- "it is part of a [right-flanking"
 - "[right-flanking delimiter run]"
 - "and either (a) not part of a ["
-- "[left-flanking delimiter run]"
-- "]\n    or (b) part of a ["
-- "[left-flanking delimiter run]"
-- "]\n    followed by a ["
-- "[Unicode punctuation character]."
+- "not part of a [left-flanking"
+- "a [left-flanking delimiter run]"
+- "or (b) part of a [left-flanking"
+- "a [left-flanking delimiter run]"
+- "followed by a [Unicode"
+- "by a [Unicode punctuation"
+- "punctuation character]."
 - "9."
 - Emphasis begins with a delimiter
-- "with a delimiter that ["
-- "[can open emphasis] and ends"
-- "with a delimiter that ["
-- "[can close emphasis]"
-- "], and that uses the same"
+- "with a delimiter that [can open"
+- "that [can open emphasis] and"
+- "emphasis] and ends"
+- "with a delimiter that [can close"
+- "that [can close emphasis], and"
+- "emphasis], and that uses the"
+- that uses the same
 - "character (`_` or `*`"
-- ) as the opening delimiter.  The
+- "`*`) as the opening delimiter."
+- The
 - opening and closing delimiters
 - delimiters must belong to
-- " must belong to separate\n    ["
-- "[delimiter runs]"
-- "."
+- must belong to separate
+- "[delimiter runs]."
 - If one of the delimiters can
 - delimiters can both
 - "open and close emphasis, then"
@@ -6041,18 +6093,19 @@ expression: chunks
 - "10."
 - Strong emphasis begins with a
 - begins with a delimiter that
-- "[can open strong emphasis]"
-- "] and ends with a delimiter that"
-- "[can close strong emphasis]"
-- ", and that uses the same"
-- " uses the same character\n    ("
+- "[can open strong emphasis] and"
+- "emphasis] and ends with a"
+- and ends with a delimiter that
+- "[can close strong emphasis], and"
+- "emphasis], and that uses the"
+- that uses the same character
 - "(`_` or `*`"
-- ) as the opening delimiter.  The
+- "`*`) as the opening delimiter."
+- The
 - opening and closing delimiters
 - delimiters must belong to
-- " must belong to separate\n    ["
-- "[delimiter runs]"
-- "."
+- must belong to separate
+- "[delimiter runs]."
 - If one of the delimiters can
 - delimiters can both open
 - "and close strong emphasis, then"
@@ -6080,8 +6133,8 @@ expression: chunks
 - "-delimited strong emphasis,"
 - "strong emphasis, unless it"
 - is backslash-escaped.
-- Where rules 1--
-- 12 above are compatible with
+- Where rules 1--12 above are
+- 1--12 above are compatible with
 - compatible with multiple
 - "with multiple parsings,"
 - the following principles resolve
@@ -6158,8 +6211,9 @@ expression: chunks
 - ", because the opening `*`"
 - "`*` is followed by"
 - "whitespace, and hence not part"
-- "hence not part of a ["
-- "[left-flanking delimiter run]:"
+- "hence not part of a [left-"
+- "part of a [left-flanking"
+- "a [left-flanking delimiter run]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "a * foo bar*\n."
@@ -6171,8 +6225,8 @@ expression: chunks
 - by an alphanumeric and followed
 - "and followed by punctuation, and"
 - "punctuation, and hence"
-- "not part of a ["
-- "[left-flanking delimiter run]:"
+- "not part of a [left-flanking"
+- "a [left-flanking delimiter run]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "a*\"foo\"*\n."
@@ -6295,6 +6349,7 @@ expression: chunks
 - punctuation and followed by an
 - followed by an alphanumeric
 - "(hence it is not part of a ["
+- "not part of a [right-flanking"
 - "[right-flanking delimiter run]:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -6391,8 +6446,8 @@ expression: chunks
 - by an alphanumeric and followed
 - "and followed by punctuation, and"
 - "punctuation, and hence"
-- "not part of a ["
-- "[left-flanking delimiter run]:"
+- "not part of a [left-flanking"
+- "a [left-flanking delimiter run]:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "a**\"foo\"**\n."
@@ -6669,8 +6724,9 @@ expression: chunks
 - closing delimiters is a multiple
 - is a multiple of 3 unless
 - both lengths are multiples of 3.
-- "For the same reason, we don'"
-- "'t get two consecutive"
+- "For the same reason, we don't"
+- "reason, we don't get two"
+- "we don't get two consecutive"
 - emphasis sections in this
 - "sections in this example:"
 - "````````````````````````````````"
@@ -7128,22 +7184,24 @@ expression: chunks
 - q=__</a></p>
 - "````````````````````````````````"
 - "## Links"
-- "A link contains [link text]"
-- "link text] (the visible text), a"
-- "[link destination]"
+- "A link contains [link text] (the"
+- "[link text] (the visible text),"
+- "visible text), a [link"
+- "text), a [link destination]"
 - (the URI that is the link
 - "that is the link destination),"
 - "destination), and optionally a ["
-- "[link title]."
+- "optionally a [link title]."
 - There are two basic kinds of
 - basic kinds of links in Markdown
-- "in Markdown.  In [inline links]"
-- "[inline links] the"
+- in Markdown.
+- "In [inline links] the"
 - destination and title are given
 - title are given immediately
 - immediately after the link text.
-- "In\n[reference links]"
-- the destination and title are
+- In
+- "[reference links] the"
+- "links] the destination and title"
 - and title are defined elsewhere
 - " elsewhere in\nthe document."
 - "A [link text](@)"
@@ -7151,10 +7209,9 @@ expression: chunks
 - sequence of zero or more
 - inline elements enclosed by
 - "enclosed by square brackets (`[`"
-- "`[` and `]`).  The"
-- ").  The\nfollowing rules apply:"
-- "-"
-- Links may not contain other
+- "`[` and `]`)."
+- "The\nfollowing rules apply:"
+- "- Links may not contain other"
 - "contain other links, at any"
 - "links, at any level of nesting."
 - If
@@ -7164,6 +7221,7 @@ expression: chunks
 - "other, the inner-most definition"
 - "-most definition is used."
 - "- Brackets are allowed in the ["
+- "allowed in the [link text] only"
 - "[link text] only if (a) they"
 - are backslash-escaped or (b)
 - "-escaped or (b) they appear as a"
@@ -7174,27 +7232,25 @@ expression: chunks
 - "of zero or more inlines, and"
 - "a close bracket `]`."
 - "- Backtick [code spans], ["
-- "[code spans], [autolinks]"
-- "], [autolinks], and raw ["
-- "], and raw [HTML tags]"
-- "[HTML tags] bind more tightly"
+- "[code spans], [autolinks], and"
+- "[autolinks], and raw [HTML tags]"
+- "raw [HTML tags] bind more"
+- "tags] bind more tightly"
 - than the brackets in link text.
 - "Thus, for example,"
 - "`` [foo`]` ``"
 - "could not be a link text, since"
 - "link text, since the second `]`"
 - "`]`\n  is part of a code span."
-- "-"
-- The brackets in link text bind
+- "- The brackets in link text bind"
 - link text bind more tightly than
-- " tightly than markers for\n  ["
-- "[emphasis and strong emphasis]"
-- "]. Thus, for example,"
+- tightly than markers for
+- "[emphasis and strong emphasis]."
+- "Thus, for example,"
 - "`*[foo*](url)` is a link."
 - "A [link destination](@)"
 - consists of either
-- "-"
-- a sequence of zero or more
+- "- a sequence of zero or more"
 - of zero or more characters
 - more characters between an
 - "between an opening `<` and a"
@@ -7202,15 +7258,14 @@ expression: chunks
 - that contains no line endings or
 - " line endings or unescaped\n  `<`"
 - "`<` or `>` characters, or"
-- "-"
-- a nonempty sequence of
+- "- a nonempty sequence of"
 - sequence of characters that does
 - "that does not start with `<`,"
-- "`<`,\n  does not include ["
-- "[ASCII control characters]["
-- "][ASCII control character]\n  or"
-- "]\n  or [space]"
-- "character, and includes"
+- "does not include [ASCII control"
+- "[ASCII control characters][ASCII"
+- "][ASCII control character]"
+- "or [space] character, and"
+- "] character, and includes"
 - ", and includes parentheses only"
 - parentheses only if (a) they are
 - backslash-escaped or (b) they
@@ -7226,8 +7281,7 @@ expression: chunks
 - should be supported.)
 - "A [link title](@)"
 - consists of either
-- "-"
-- a sequence of zero or more
+- "- a sequence of zero or more"
 - of zero or more characters
 - more characters between straight
 - between straight double-quote
@@ -7235,8 +7289,7 @@ expression: chunks
 - "), including a `\"`"
 - "`\"` character only if it is"
 - "backslash-escaped, or"
-- "-"
-- a sequence of zero or more
+- "- a sequence of zero or more"
 - of zero or more characters
 - more characters between straight
 - between straight single-quote
@@ -7244,8 +7297,7 @@ expression: chunks
 - "), including a `'`"
 - "`'` character only if it is"
 - "backslash-escaped, or"
-- "-"
-- a sequence of zero or more
+- "- a sequence of zero or more"
 - of zero or more characters
 - more characters between matching
 - between matching parentheses
@@ -7253,48 +7305,46 @@ expression: chunks
 - "`(` or `)`"
 - "or `)` character only if it is"
 - backslash-escaped.
-- "Although [link titles]"
-- "may span multiple lines, they"
-- " lines, they may not contain\na ["
+- "Although [link titles] may span"
+- "titles] may span multiple lines,"
+- "multiple lines, they may not"
+- ", they may not contain"
 - "a [blank line]."
 - "An [inline link](@)"
-- "[inline link](@) consists of a ["
 - "consists of a [link text]"
-- "[link text] followed immediately"
+- "of a [link text] followed"
+- "text] followed immediately"
 - "by a left parenthesis `(`"
-- "`(`, an optional ["
 - ", an optional [link destination]"
-- "], an optional\n[link title]"
+- "destination], an optional"
+- "[link title], and a right"
 - "], and a right parenthesis `)`."
 - These four components may be
 - "may be separated by spaces, tabs"
 - "by spaces, tabs, and up to one"
 - ", and up to one line\nending."
-- "ending.\nIf both ["
 - "If both [link destination] and ["
-- "] and [link title]"
-- "[link title] are present, they"
-- "*must* be"
+- "] and [link title] are present,"
+- "] are present, they *must* be"
 - "separated by spaces, tabs, and"
 - ", tabs, and up to one line"
 - up to one line ending.
-- "The link'"
-- s text consists of the inlines
-- " of the inlines contained\nin the"
-- "in the [link text]"
-- (excluding the enclosing square
-- enclosing square brackets).
-- "The link'"
-- s URI consists of the link
-- "of the link destination,"
-- "destination, excluding enclosing"
-- "`<...>`"
+- "The link's text consists of the"
+- consists of the inlines
+- of the inlines contained
+- "in the [link text] (excluding"
+- "text] (excluding the enclosing"
+- the enclosing square brackets).
+- "The link's URI consists of the"
+- consists of the link destination
+- "link destination, excluding"
+- ", excluding enclosing\n`<...>`"
 - "if present, with backslash-"
 - with backslash-escapes in effect
-- in effect as described
-- "above.  The link'"
-- s title consists of the link
-- "of the link title, excluding its"
+- " in effect as described\nabove."
+- "The link's title consists of the"
+- "consists of the link title,"
+- "the link title, excluding its"
 - "enclosing delimiters, with"
 - "delimiters, with backslash-"
 - with backslash-escapes in effect
@@ -7503,7 +7553,7 @@ expression: chunks
 - try to omit the destination and
 - "destination and keep the title,"
 - "keep the title, you'll"
-- "'ll\nget unexpected results:"
+- "get unexpected results:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "[link](\"title\")\n."
@@ -7540,10 +7590,10 @@ expression: chunks
 - separated from the link using
 - "the link using spaces, tabs, and"
 - ", tabs, and up to one line"
-- "ending.\nOther ["
-- "Other [Unicode whitespace]"
-- "] like non-breaking space doesn'"
-- "'t work."
+- ending.
+- "Other [Unicode whitespace] like"
+- "whitespace] like non-breaking"
+- "non-breaking space doesn't work."
 - "````````````````````````````````"
 - "```````````````` example"
 - "[link](/url \"title\")\n."
@@ -7586,15 +7636,17 @@ expression: chunks
 - for the extra complexity this
 - "brings, since there are already"
 - are already many ways---
-- "---backslash escaping,"
+- "many ways---backslash escaping,"
 - entity and numeric character
 - "character references, or using a"
 - ", or using a different"
 - quote type for the enclosing
-- the enclosing title---
-- "---to write titles containing"
-- "double quotes.  `Markdown.pl`'"
-- s handling of titles has a
+- the enclosing title---to write
+- title---to write titles
+- "-to write titles containing"
+- double quotes.
+- "`Markdown.pl`"
+- "'s handling of titles has a"
 - of titles has a number
 - of other strange features.
 - "For example, it allows single-"
@@ -7607,7 +7659,6 @@ expression: chunks
 - "links, it allows a title to"
 - " a title to begin\nwith `\"`"
 - "with `\"` and end with `)`."
-- "`)`.  `Markdown.pl`"
 - "`Markdown.pl` 1.0.1 even allows"
 - titles with no closing quotation
 - "quotation mark, though 1.0.2b8"
@@ -7767,10 +7818,13 @@ expression: chunks
 - "-reference-link)."
 - "A [full reference link](@)"
 - "consists of a [link text]"
+- "of a [link text] immediately"
 - "] immediately followed by a ["
-- "[link label]\nthat [matches] a ["
-- "] a [link reference definition]"
-- "] elsewhere in the document."
+- "followed by a [link label]"
+- "that [matches] a [link reference"
+- "[link reference definition]"
+- "definition] elsewhere in the"
+- elsewhere in the document.
 - "A [link label](@)"
 - "begins with a left bracket (`[`"
 - "`[`) and ends"
@@ -7788,8 +7842,9 @@ expression: chunks
 - characters are not allowed
 - are not allowed inside the
 - opening and closing square
-- "closing square brackets of ["
-- "[link labels].  A link"
+- "closing square brackets of [link"
+- "of [link labels]."
+- A link
 - label can have at most 999
 - have at most 999 characters
 - 999 characters inside the square
@@ -7820,10 +7875,10 @@ expression: chunks
 - (It is desirable in such cases
 - in such cases to emit a warning.
 - emit a warning.)
-- "The link'"
-- s URI and title are provided by
-- "are provided by the matching ["
-- "[link\nreference definition]."
+- "The link's URI and title are"
+- and title are provided by the
+- "provided by the matching [link"
+- "reference definition]."
 - "Here is a simple example:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -7833,7 +7888,8 @@ expression: chunks
 - "\" title=\"title\">foo</a></p>"
 - "````````````````````````````````"
 - "The rules for the [link text]"
-- "[link text] are the same as with"
+- "the [link text] are the same as"
+- are the same as with
 - "[inline links].  Thus:"
 - The link text may contain
 - text may contain balanced
@@ -7895,9 +7951,9 @@ expression: chunks
 - "href=\"/uri\">ref</a></p>"
 - "````````````````````````````````"
 - "(In the examples above, we have"
-- "above, we have two ["
-- "[shortcut reference links]"
-- "]\ninstead of one ["
+- "above, we have two [shortcut"
+- "two [shortcut reference links]"
+- "instead of one [full reference"
 - "[full reference link].)"
 - The following cases illustrate
 - cases illustrate the precedence
@@ -7971,8 +8027,8 @@ expression: chunks
 - "````````````````````````````````"
 - "No spaces, tabs, or line endings"
 - or line endings are allowed
-- "are allowed between the ["
-- "[link text] and the\n[link label]"
+- "are allowed between the [link"
+- "the [link text] and the"
 - "[link label]:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -7990,17 +8046,17 @@ expression: chunks
 - "=\"title\">bar</a></p>"
 - "````````````````````````````````"
 - This is a departure from John
-- "from John Gruber'"
-- "'s original Markdown syntax"
+- "from John Gruber's original"
+- original Markdown syntax
 - "description, which explicitly"
 - which explicitly allows
 - allows whitespace between the
 - between the link
 - text and the link label.
 - It brings reference links in
-- " links in line with\n["
-- "[inline links]"
-- ", which (according to both"
+- links in line with
+- "[inline links], which (according"
+- which (according to both
 - to both original Markdown and
 - this spec) cannot have
 - ) cannot have whitespace after
@@ -8009,9 +8065,8 @@ expression: chunks
 - "importantly, it prevents"
 - ", it prevents inadvertent"
 - inadvertent capture of
-- " capture of consecutive\n["
-- "[shortcut reference links]"
-- "."
+- capture of consecutive
+- "[shortcut reference links]."
 - If whitespace is allowed between
 - allowed between the
 - "link text and the link label,"
@@ -8024,9 +8079,9 @@ expression: chunks
 - "``` markdown"
 - "[foo]\n[bar]\n\n[foo]: /url1"
 - "[foo]: /url1\n[bar]: /url2\n```"
-- "(Note that ["
-- "[shortcut reference links]"
-- "] were introduced by Gruber"
+- "(Note that [shortcut reference"
+- "reference links] were introduced"
+- were introduced by Gruber
 - himself in a beta version of
 - "`Markdown.pl`"
 - ", but never included"
@@ -8044,8 +8099,9 @@ expression: chunks
 - as it frequently leads to
 - unintended results.)
 - When there are multiple matching
+- "matching [link reference"
 - "[link reference definitions],"
-- "],\nthe first is used:"
+- "the first is used:"
 - "````````````````````````````````"
 - "```````````````` example"
 - "[foo]: /url1\n\n[foo]: /url2"
@@ -8067,8 +8123,8 @@ expression: chunks
 - "[foo!]: /url\n.\n<p>[bar][foo!]"
 - ".\n<p>[bar][foo!]</p>"
 - "````````````````````````````````"
-- "[Link labels]"
-- "cannot contain brackets, unless"
+- "[Link labels] cannot contain"
+- "] cannot contain brackets,"
 - "brackets, unless they are"
 - "backslash-escaped:"
 - "````````````````````````````````"
@@ -8102,7 +8158,7 @@ expression: chunks
 - "[bar\\\\]: /uri\n\n[bar\\\\]\n."
 - ".\n<p><a href=\"/uri\">bar\\</a></p>"
 - "````````````````````````````````"
-- "A [link label]"
+- "A [link label] must contain at"
 - must contain at least one
 - at least one character that is
 - "that is not a space, tab, or"
@@ -8119,17 +8175,17 @@ expression: chunks
 - "````````````````````````````````"
 - "A [collapsed reference link](@)"
 - "consists of a [link label] that"
-- "link label] that [matches] a\n["
-- "] a\n[link reference definition]"
-- "] elsewhere in the"
+- "link label] that [matches] a"
+- "[link reference definition]"
+- "definition] elsewhere in the"
 - "document, followed by the string"
 - "`[]`."
 - The contents of the link label
 - the link label are parsed as
 - "are parsed as inlines,"
-- "which are used as the link'"
-- "'s text.  The link'"
-- "'s URI and title are"
+- "which are used as the link's"
+- "as the link's text."
+- "The link's URI and title are"
 - provided by the matching
 - by the matching reference link
 - reference link definition.
@@ -8171,17 +8227,17 @@ expression: chunks
 - "````````````````````````````````"
 - "A [shortcut reference link](@)"
 - "consists of a [link label] that"
-- "link label] that [matches] a\n["
-- "] a\n[link reference definition]"
-- "] elsewhere in the"
+- "link label] that [matches] a"
+- "[link reference definition]"
+- "definition] elsewhere in the"
 - document and is not followed by
 - "`[]` or a link label."
 - The contents of the link label
 - the link label are parsed as
 - "are parsed as inlines,"
-- "which are used as the link'"
-- "'s text.  The link'"
-- "'s URI and title"
+- "which are used as the link's"
+- "as the link's text."
+- "The link's URI and title"
 - are provided by the matching
 - by the matching link reference
 - link reference definition.
@@ -8319,15 +8375,16 @@ expression: chunks
 - "## Images"
 - Syntax for images is like the
 - "is like the syntax for links,"
-- "for links, with one"
-- "difference. Instead of ["
-- "[link text], we have an"
-- "[image description](@)"
-- ".  The rules for this are the"
-- "same as for [link text]"
-- "[link text], except that (a) an"
+- " for links, with one\ndifference."
+- "Instead of [link text], we have"
+- "text], we have an"
+- "[image description](@)."
+- The rules for this are the
+- "same as for [link text], except"
+- "text], except that (a) an"
 - image description starts with
-- "`![` rather than `[`, and"
+- "`![`"
+- "rather than `[`, and"
 - (b) an image description may
 - description may contain links.
 - An image description has inline
@@ -8337,7 +8394,7 @@ expression: chunks
 - "is rendered to HTML,"
 - this is standardly used as the
 - "used as the image's `alt`"
-- "'s `alt` attribute."
+- "`alt` attribute."
 - "````````````````````````````````"
 - "```````````````` example"
 - "![foo](/url \"title\")\n."
@@ -8373,15 +8430,16 @@ expression: chunks
 - recommended that in rendering to
 - "in rendering to HTML, only the"
 - "HTML, only the plain string"
-- " the plain string content\nof the"
-- "of the [image description]"
-- "] be used.  Note that in"
+- the plain string content
+- "of the [image description] be"
+- "description] be used."
+- Note that in
 - "the above example, the alt"
-- "example, the alt attribute'"
-- "'s value is `foo bar`, not"
+- "example, the alt attribute's"
+- "alt attribute's value is"
 - "`foo bar`, not `foo\n[bar](/url)`"
-- "or `foo <a href=\"/url\">bar</a>`"
-- ".  Only the plain string"
+- "or `foo <a href=\"/url\">bar</a>`."
+- Only the plain string
 - "content is rendered, without"
 - ", without formatting."
 - "````````````````````````````````"
@@ -8541,45 +8599,44 @@ expression: chunks
 - "[Autolink](@)"
 - s are absolute URIs and email
 - URIs and email addresses inside
-- "`<` and `>`"
-- "."
+- "`<` and `>`."
 - "They are parsed as links, with"
 - "as links, with the URL or email"
 - the URL or email address
 - as the link label.
 - "A [URI autolink](@) consists of"
 - "consists of `<`, followed by an"
-- ", followed by an\n[absolute URI]"
-- "[absolute URI] followed by `>`"
-- "`>`.  It is parsed as"
+- "[absolute URI] followed by `>`."
+- It is parsed as
 - "a link to the URI, with the URI"
-- ", with the URI as the link'"
-- "'s label."
+- ", with the URI as the link's"
+- "as the link's label."
 - "An [absolute URI](@),"
 - "for these purposes, consists of"
 - ", consists of a [scheme]"
-- "[scheme] followed by a colon ("
-- "`:`)"
+- "of a [scheme] followed by a"
+- "] followed by a colon (`:`)"
 - followed by zero or more
 - by zero or more characters other
-- "characters other than ["
-- "[ASCII control\ncharacters]["
+- "characters other than [ASCII"
+- "than [ASCII control"
+- "characters][ASCII control"
 - "][ASCII control character], ["
-- "], [space], `<`, and `>`."
+- "character], [space], `<`, and"
+- "`<`, and `>`."
 - If the URI includes these
 - "includes these characters, they"
 - "characters, they must be percent"
 - " must be percent-encoded\n(e.g."
 - "(e.g. `%20` for a space)."
 - "For purposes of this spec, a"
-- "[scheme](@) is any sequence\nof 2"
-- of 2--
-- 32 characters beginning with an
-- with an ASCII letter and
-- ASCII letter and followed
+- "[scheme](@) is any sequence"
+- of 2--32 characters beginning
+- beginning with an ASCII letter
+- an ASCII letter and followed
 - by any combination of ASCII
 - "of ASCII letters, digits, or the"
-- ", digits, or the symbols plus\n(\""
+- ", digits, or the symbols plus"
 - "(\"+\"), period (\".\"), or hyphen ("
 - ".\"), or hyphen (\"-\")."
 - "Here are some valid autolinks:"
@@ -8619,8 +8676,8 @@ expression: chunks
 - ":FOO@BAR.BAZ</a></p>"
 - "````````````````````````````````"
 - Note that many strings that
-- "strings that count as ["
-- "[absolute URIs] for"
+- "strings that count as [absolute"
+- "as [absolute URIs] for"
 - purposes of this spec are not
 - "spec are not valid URIs, because"
 - "URIs, because their"
@@ -8674,11 +8731,12 @@ expression: chunks
 - "//example.com/\\[\\</a></p>"
 - "````````````````````````````````"
 - "An [email autolink](@)"
-- "consists of `<`, followed by an"
+- "consists of `<`"
 - ", followed by an [email address]"
-- "[email address],\nfollowed by `>`"
-- "followed by `>`.  The link'"
-- "'s label is the email address,"
+- " [email address],\nfollowed by"
+- "followed by `>`."
+- "The link's label is the email"
+- "is the email address,"
 - "and the URL is `mailto:`"
 - followed by the email address.
 - "An [email address](@),"
@@ -8775,17 +8833,17 @@ expression: chunks
 - "An [attribute](@)"
 - "consists of spaces, tabs, and up"
 - ", tabs, and up to one line"
-- " up to one line ending,\nan ["
-- "an [attribute name]"
-- "attribute name], and an optional"
+- "up to one line ending,"
+- "an [attribute name], and an"
+- "name], and an optional"
 - "[attribute value specification]."
 - "An [attribute name](@)"
 - "consists of an ASCII letter, `_`"
 - "`_`, or `:`"
 - ", followed by zero or more ASCII"
 - "letters, digits, `_`, `.`, `:`"
-- "`_`, `.`, `:`, or `-`"
-- "`-`.  (Note:  This is the XML"
+- "`_`, `.`, `:`, or `-`."
+- "(Note:  This is the XML"
 - specification restricted to
 - restricted to ASCII.
 - HTML5 is laxer.)
@@ -8798,14 +8856,16 @@ expression: chunks
 - "a `=`"
 - "character, optional spaces, tabs"
 - "spaces, tabs, and up to one line"
-- " up to one line ending,\nand an ["
+- "up to one line ending,"
 - "and an [attribute value]."
 - "An [attribute value](@)"
-- "consists of an ["
-- "[unquoted attribute value],\na ["
+- "consists of an [unquoted"
+- "of an [unquoted attribute value]"
+- "attribute value],"
 - "a [single-quoted attribute value"
-- "], or a ["
-- "[double-quoted attribute value]."
+- "attribute value], or a [double-"
+- "], or a [double-quoted attribute"
+- "quoted attribute value]."
 - "An [unquoted attribute value](@)"
 - is a nonempty string of
 - string of characters not
@@ -8826,21 +8886,20 @@ expression: chunks
 - "characters not including `\"`"
 - "`\"`, and a final `\"`."
 - "An [open tag](@) consists of a"
-- "consists of a `<` character, a ["
-- "character, a [tag name],"
-- "[tag name],\nzero or more ["
-- ",\nzero or more [attributes]"
-- ", optional spaces, tabs, and up"
-- ", tabs, and up to one line"
-- "up to one line ending,"
+- "consists of a `<`"
+- "`<` character, a [tag name],"
+- "zero or more [attributes],"
+- "[attributes], optional spaces,"
+- "optional spaces, tabs, and up to"
+- "tabs, and up to one line ending,"
 - "an optional `/` character, and a"
 - "character, and a `>` character."
 - "A [closing tag](@)"
 - "consists of the string `</`, a"
-- "`</`, a\n[tag name]"
-- ", optional spaces, tabs, and up"
-- ", tabs, and up to one line"
-- "up to one line ending, and the"
+- "[tag name], optional spaces,"
+- "optional spaces, tabs, and up to"
+- "tabs, and up to one line ending,"
+- "one line ending, and the"
 - " ending, and the character\n`>`."
 - "An [HTML comment](@) consists of"
 - "consists of `<!-->`, `<!--->`"
@@ -8873,14 +8932,13 @@ expression: chunks
 - characters not including the
 - " including the string\n`]]>`"
 - "`]]>`, and the string `]]>`."
-- "An [HTML tag](@) consists of an"
+- "An [HTML tag](@)"
 - "consists of an [open tag], a ["
-- "[open tag], a [closing tag],\nan"
-- "closing tag],\nan [HTML comment]"
-- "[HTML comment], a ["
+- "[open tag], a [closing tag],"
+- "an [HTML comment], a [processing"
 - "], a [processing instruction], a"
-- "], a [declaration],\nor a ["
-- "],\nor a [CDATA section]."
+- "instruction], a [declaration],"
+- "or a [CDATA section]."
 - "Here are some simple open tags:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -9040,9 +9098,9 @@ expression: chunks
 - "````````````````````````````````"
 - "For a more visible alternative,"
 - "alternative, a backslash before"
-- " backslash before the\n["
-- "[line ending]"
-- may be used instead of two or
+- backslash before the
+- "[line ending] may be used"
+- "] may be used instead of two or"
 - "of two or more spaces:"
 - "````````````````````````````````"
 - "```````````````` example"
@@ -9140,17 +9198,16 @@ expression: chunks
 - preceded by two or more spaces
 - or more spaces or a backslash is
 - a backslash is parsed as a
-- "[softbreak](@)"
-- "."
+- "[softbreak](@)."
 - (A soft line break may be
 - break may be rendered in HTML
-- " rendered in HTML either as a\n["
-- "[line ending]"
-- or as a space.
+- rendered in HTML either as a
+- "[line ending] or as a space."
 - The result will be the same in
 - browsers.
-- "In the examples here, a ["
-- "[line ending] will be used.)"
+- "In the examples here, a [line"
+- "here, a [line ending] will be"
+- "ending] will be used.)"
 - "````````````````````````````````"
 - "```````````````` example"
 - "foo\nbaz\n.\n<p>foo\nbaz</p>"
@@ -9208,11 +9265,12 @@ expression: chunks
 - "phase, lines of input are"
 - of input are consumed and the
 - consumed and the block
-- structure of the document---
-- "its division into paragraphs,"
-- "into paragraphs, block quotes,"
-- "list items, and so on---"
-- is constructed.
+- structure of the document---its
+- document---its division into
+- "division into paragraphs, block"
+- ", block quotes,"
+- "list items, and so on---is"
+- ", and so on---is constructed."
 - Text is assigned to these
 - blocks but not parsed.
 - Link reference definitions are
@@ -9236,13 +9294,14 @@ expression: chunks
 - "processing, the document is"
 - the document is represented as a
 - represented as a tree of
-- "**blocks**"
-- ".  The root of the tree is a"
-- "`document` block.  The"
-- "block.  The `document`"
+- "**blocks**."
+- The root of the tree is a
+- "`document` block."
+- "The `document`"
 - may have any number of other
 - number of other blocks as
-- "**children**.  These children"
+- "**children**."
+- These children
 - "may, in turn, have other blocks"
 - other blocks as children.
 - The last child of a block
@@ -9318,7 +9377,7 @@ expression: chunks
 - if the block is to remain open.
 - "For example, a block quote"
 - ", a block quote requires a\n`>`"
-- character.
+- "`>` character."
 - A paragraph requires a non-blank
 - a non-blank line.
 - In this phase we may match all
@@ -9328,7 +9387,7 @@ expression: chunks
 - But we cannot close unmatched
 - "close unmatched blocks yet,"
 - "blocks yet, because we may have"
-- " we may have a\n["
+- we may have a
 - "[lazy continuation line]."
 - "2."
 - "Next, after consuming the"
@@ -9364,7 +9423,7 @@ expression: chunks
 - Setext headings are formed when
 - are formed when we see a line of
 - we see a line of a paragraph
-- "that is a ["
+- "that is a [setext heading"
 - "[setext heading underline]."
 - Reference link definitions are
 - definitions are detected when a
@@ -9399,8 +9458,7 @@ expression: chunks
 - "open `document` block, and a"
 - "block, and a `paragraph`"
 - "`paragraph` block as a child of"
-- "the `block_quote`"
-- "."
+- "the `block_quote`."
 - Then the text is added to the
 - is added to the last open
 - "block, the `paragraph`:"
@@ -9410,7 +9468,7 @@ expression: chunks
 - "         \"Lorem ipsum dolor\"\n```"
 - "The next line,"
 - "``` markdown\nsit amet.\n```"
-- "is a \"lazy continuation\""
+- "is a \"lazy continuation\" of the"
 - "\" of the open `paragraph`"
 - "`paragraph`, so it gets added"
 - "to the paragraph's text:"
@@ -9425,13 +9483,12 @@ expression: chunks
 - "block to be closed, and a new"
 - "`list` block"
 - " block\nopened as a child of the"
-- "`block_quote`.  A `list_item`"
-- ".  A `list_item` is also"
+- "`block_quote`."
+- "A `list_item` is also"
 - " is also\nadded as a child of the"
 - "`list`, and a `paragraph`"
 - "`paragraph` as a child of\nthe"
-- "the `list_item`"
-- "."
+- "the `list_item`."
 - The text is then added to the
 - "added to the new `paragraph`:"
 - "``` tree"
@@ -9452,7 +9509,8 @@ expression: chunks
 - ") to be closed,\nand a new"
 - "and a new `list_item`"
 - "opened up as child of the `list`"
-- "`list`.  A `paragraph`"
+- "`list`."
+- "A `paragraph`"
 - is added as a child of the new
 - "`list_item`"
 - ", to contain the text."
@@ -9475,7 +9533,8 @@ expression: chunks
 - "parsed, all open blocks are"
 - open blocks are closed.
 - "We then \"walk the tree,\""
-- "visiting every node, and parse"
+- "\"walk the tree,\" visiting every"
+- "\" visiting every node, and parse"
 - "node, and parse raw"
 - string contents of paragraphs
 - of paragraphs and headings as
@@ -9503,7 +9562,8 @@ expression: chunks
 - list_item
 - paragraph
 - "          str \"aliquando id\"\n```"
-- "Notice how the [line ending]"
+- "Notice how the [line ending] in"
+- "[line ending] in the first"
 - "] in the first paragraph has"
 - "been parsed as a `softbreak`"
 - ", and the asterisks in the first"
@@ -9520,9 +9580,8 @@ expression: chunks
 - ", links, and images."
 - This is done using the following
 - algorithm.
-- "When we'"
-- re parsing inlines and we hit
-- and we hit either
+- "When we're parsing inlines and"
+- inlines and we hit either
 - "- a run of `*` or `_`"
 - "`*` or `_` characters, or"
 - "- a `[` or `![`"
@@ -9533,8 +9592,9 @@ expression: chunks
 - add a pointer to this text node
 - this text node to the
 - "[delimiter stack](@)."
-- "The [delimiter stack]"
-- "] is a doubly linked list.  Each"
+- "The [delimiter stack] is a"
+- "stack] is a doubly linked list."
+- Each
 - element contains a pointer to a
 - "a pointer to a text node, plus"
 - "text node, plus information"
@@ -9543,10 +9603,10 @@ expression: chunks
 - "`[`, `![`, `*`, `_`)"
 - "- the number of delimiters,"
 - "- whether the delimiter is \""
-- "\"active\""
-- "\" (all are active to start), and"
-- "-"
-- whether the delimiter is a
+- "delimiter is \"active\" (all are"
+- "active\" (all are active to start"
+- "active to start), and"
+- "- whether the delimiter is a"
 - "delimiter is a potential opener,"
 - "opener, a potential closer,"
 - or both (which depends on what
@@ -9570,33 +9630,33 @@ expression: chunks
 - "stack, we look backwards"
 - through the stack for an opening
 - "`[` or `![` delimiter."
-- "- If we don'"
-- "t find one, we return a literal"
+- "- If we don't find one, we"
+- "find one, we return a literal"
 - "return a literal text node `]`."
-- "- If we do find one, but it'"
-- "'s not *active*"
+- "- If we do find one, but it's"
+- "one, but it's not *active*"
 - "*active*, we remove the inactive"
 - "delimiter from the stack, and"
 - "the stack, and return a literal"
 - "return a literal text node `]`."
-- "- If we find one and it'"
-- "s active, then we parse ahead to"
-- parse ahead to see if
+- "-"
+- "If we find one and it's active,"
+- "and it's active, then we parse"
+- ", then we parse ahead to see if"
 - "we have an inline link/image,"
 - "link/image, reference link/image"
 - "link/image, collapsed reference"
 - "link/image, or shortcut"
 - ", or shortcut reference link/"
 - reference link/image.
-- "+ If we don'"
-- "t, then we remove the opening"
+- "+ If we don't, then we remove"
+- ", then we remove the opening"
 - the opening delimiter from the
 - delimiter stack and return a
 - and return a literal text node
 - "`]`."
 - "+ If we do, then"
-- "*"
-- We return a link or image node
+- "* We return a link or image node"
 - or image node whose children are
 - children are the inlines
 - after the text node pointed to
@@ -9606,16 +9666,16 @@ expression: chunks
 - "on these inlines, with the `[`"
 - "`[` opener\n      as"
 - " opener\n      as `stack_bottom`."
-- "*"
-- We remove the opening delimiter.
-- "*"
-- If we have a link (and not an
+- "* We remove the opening"
+- the opening delimiter.
+- "* If we have a link (and not an"
 - "link (and not an image), we also"
 - "image), we also set all"
 - "`[`"
 - delimiters before the opening
 - the opening delimiter to
-- "*inactive*.  (This"
+- "*inactive*."
+- (This
 - will prevent us from getting
 - us from getting links within
 - links within links.)
@@ -9623,14 +9683,15 @@ expression: chunks
 - "Parameter `stack_bottom`"
 - sets a lower bound to how far we
 - "descend in the [delimiter stack]"
-- "].  If it is NULL, we can"
+- "delimiter stack]."
+- "If it is NULL, we can"
 - go all the way to the bottom.
 - "Otherwise, we stop before"
 - "visiting `stack_bottom`."
 - "Let `current_position`"
 - "point to the element on the ["
-- "[delimiter stack]\njust above"
-- "]\njust above `stack_bottom`"
+- "element on the [delimiter stack]"
+- "just above `stack_bottom`"
 - (or the first element if
 - "`stack_bottom`\nis NULL)."
 - We keep track of the
@@ -9643,7 +9704,8 @@ expression: chunks
 - (modulo 3) and to whether the
 - to whether the closing delimiter
 - delimiter can also be an
-- opener.  Initialize this to
+- opener.
+- Initialize this to
 - "`stack_bottom`."
 - Then we repeat the following
 - the following until we run out
@@ -9659,19 +9721,19 @@ expression: chunks
 - (This will be the potential
 - be the potential closer closest
 - to the beginning of the input --
+- of the input -- the first one in
 - the first one in parse order.)
-- "-"
-- "Now, look back in the stack ("
+- "- Now, look back in the stack ("
 - in the stack (staying above
 - "`stack_bottom` and\n  the"
 - " and\n  the `openers_bottom`"
 - for this delimiter type) for the
 - first matching potential opener
 - "potential opener (\"matching\""
-- "matching\" means same delimiter)."
+- "(\"matching\" means same delimiter"
+- same delimiter).
 - "- If one is found:"
-- +
-- Figure out whether we have
+- + Figure out whether we have
 - whether we have emphasis or
 - have emphasis or strong emphasis
 - "strong emphasis:"
@@ -9679,20 +9741,18 @@ expression: chunks
 - and opener spans have length >=
 - "have length >= 2, we have"
 - "strong, otherwise regular."
-- +
-- Insert an emph or strong emph
+- + Insert an emph or strong emph
 - "or strong emph node accordingly,"
 - "accordingly, after"
 - the text node corresponding to
 - corresponding to the opener.
-- +
-- Remove any delimiters between
+- + Remove any delimiters between
 - between the opener and closer
 - and closer from
 - the delimiter stack.
-- +
-- Remove 1 (for regular emph) or 2
-- emph) or 2 (for strong emph)
+- + Remove 1 (for regular emph) or
+- regular emph) or 2 (for strong
+- or 2 (for strong emph)
 - for strong emph) delimiters
 - from the opening and closing
 - and closing text nodes.
@@ -9725,12 +9785,11 @@ expression: chunks
 - remove it from the delimiter
 - the delimiter stack (since we
 - "stack (since we know it can't"
-- "'t\n    be a closer either)."
+- be a closer either).
 - "+ Advance `current_position`"
 - to the next element in the stack
 - in the stack.
-- "After we'"
-- "re done, we remove all"
+- "After we're done, we remove all"
 - ", we remove all delimiters above"
 - "`stack_bottom` from the"
 - " from the\ndelimiter stack."
