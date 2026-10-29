@@ -84,12 +84,35 @@ impl FallbackLevel {
                 .segment_str(text)
                 .tuple_windows()
                 .map(|(i, j)| (i, &text[i..j])),
+            // A list marker ("1. ", "2) ") ends a Unicode sentence when the
+            // next word starts with a capital letter. It is not a sentence:
+            // it stays with the words after it.
             Self::Sentence => SENTENCE_SEGMENTER
                 .segment_str(text)
                 .tuple_windows()
-                .map(|(i, j)| (i, &text[i..j])),
+                .map(|(i, j)| (i, &text[i..j]))
+                .coalesce(|(i, a), (j, b)| {
+                    if is_list_marker(a) {
+                        Ok((i, &text[i..j + b.len()]))
+                    } else {
+                        Err(((i, a), (j, b)))
+                    }
+                }),
         }
     }
+}
+
+/// True for a section that holds only an ordered list marker: one to nine
+/// digits, then `.` or `)`.
+fn is_list_marker(section: &str) -> bool {
+    let Some(label) = section
+        .trim()
+        .strip_suffix('.')
+        .or_else(|| section.trim().strip_suffix(')'))
+    else {
+        return false;
+    };
+    (1..=9).contains(&label.len()) && label.bytes().all(|b| b.is_ascii_digit())
 }
 
 #[cfg(test)]
@@ -99,8 +122,34 @@ mod tests {
     use super::*;
 
     #[test]
+    fn list_marker_is_not_a_sentence() {
+        for (text, expected) in [
+            (
+                "1. Actual numbers don't matter.",
+                vec!["1. Actual numbers don't matter."],
+            ),
+            (
+                "12) First item. 3. Second item.",
+                vec!["12) First item. ", "3. Second item."],
+            ),
+            ("E. M. Forster.", vec!["E. ", "M. ", "Forster."]),
+            (
+                "It ends at 1. Then more.",
+                vec!["It ends at 1. ", "Then more."],
+            ),
+            ("1. ", vec!["1. "]),
+        ] {
+            let sections = FallbackLevel::Sentence
+                .sections(text)
+                .map(|(_, section)| section)
+                .collect::<Vec<_>>();
+            assert_eq!(expected, sections, "{text}");
+        }
+    }
+
+    #[test]
     fn bounded_first_section_is_a_prefix_of_the_full_section() {
-        let text = "Short sentence one. Another sentence follows here. And a third.";
+        let text = "1. Short sentence one. Another sentence follows here. 2. And a third.";
 
         for level in FallbackLevel::iter() {
             let expected = level.sections(text).next().unwrap().1;

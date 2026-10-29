@@ -59,13 +59,13 @@ expression: chunks
 - "~~Strikethrough~~\n\n------"
 - "# Lists"
 - "```"
-- "1. First ordered list item\n2."
+- 1. First ordered list item
 - 2. Another item
-- "⋅⋅* Unordered sub-list.\n1."
-- "Actual numbers don't matter,"
+- ⋅⋅* Unordered sub-list.
+- "1. Actual numbers don't matter,"
 - "don't matter, just that it's a"
 - "just that it's a number\n⋅⋅1."
-- "⋅⋅1. Ordered sub-list\n4."
+- ⋅⋅1. Ordered sub-list
 - 4. And another item.
 - ⋅⋅⋅You can have properly
 - have properly indented
@@ -96,13 +96,12 @@ expression: chunks
 - spaces are not required.)
 - "* Unordered list can use"
 - list can use asterisks
-- "- Or minuses\n+ Or pluses\n\n1."
+- "- Or minuses\n+ Or pluses"
 - "+ Or pluses\n\n1. Make my changes"
-- "Make my changes\n    1. Fix bug"
-- "    1. Fix bug\n    2."
+- 1. Fix bug
 - 2. Improve formatting
 - "- Make the headings bigger"
-- "2. Push my commits to GitHub\n3."
+- 2. Push my commits to GitHub
 - 3. Open a pull request
 - "* Describe my changes"
 - "* Mention all the members of my"
@@ -124,8 +123,7 @@ expression: chunks
 - 1. First ordered list item
 - 2. Another item
 - ⋅⋅* Unordered sub-list.
-- "1."
-- "Actual numbers don't matter,"
+- "1. Actual numbers don't matter,"
 - "don't matter, just that it's a"
 - "just that it's a number\n⋅⋅1."
 - Ordered sub-list
