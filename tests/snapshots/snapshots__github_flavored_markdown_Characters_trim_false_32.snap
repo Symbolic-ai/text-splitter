@@ -1,6 +1,5 @@
 ---
 source: tests/snapshots.rs
-assertion_line: 242
 expression: chunks
 ---
 - "# Headers\n\n"
@@ -589,14 +588,13 @@ expression: chunks
 - " each other...\n"
 - "> > > ...or with spaces between "
 - "arrows.\n```\n\n"
-- "> "
-- "Blockquotes are very handy in "
+- "> Blockquotes are very handy in "
 - "email to emulate reply text.\n"
 - "> "
 - "This line is part of the same "
 - "quote.\n\nQuote break.\n"
-- "\n> "
-- "This is a very long line that "
+- "\n"
+- "> This is a very long line that "
 - "will still be quoted properly "
 - "when it wraps. "
 - "Oh boy let's keep writing to "
@@ -604,16 +602,13 @@ expression: chunks
 - " actually wrap for everyone. "
 - "Oh, you can *put* **Markdown**"
 - " into a blockquote.\n\n"
-- "> "
-- Blockquotes can also be nested..
-- ".\n>"
-- "> "
-- "...by using additional greater-"
-- "than signs right next to each "
+- "> Blockquotes can also be nested"
+- "...\n>"
+- "> ...by using additional greater"
+- "-than signs right next to each "
 - "other...\n> > "
-- "> "
-- "...or with spaces between arrows"
-- ".\n\n------\n\n"
+- "> ...or with spaces between "
+- "arrows.\n\n------\n\n"
 - "# Inline HTML\n\n"
 - "```\n"
 - "<dl>\n  <dt>Definition list</dt>\n"

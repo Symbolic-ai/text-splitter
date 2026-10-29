@@ -1,6 +1,5 @@
 ---
 source: tests/snapshots.rs
-assertion_line: 332
 expression: chunks
 ---
 - "# Headers"
@@ -411,7 +410,7 @@ expression: chunks
 - Duplicated footnote reference
 - "[^second]."
 - "[^first]: Footnote"
-- Footnote **can have markup**
+- "**can have markup**"
 - and multiple paragraphs.
 - "[^second]: Footnote text."
 - "------"
@@ -677,16 +676,14 @@ expression: chunks
 - right next to each other...
 - "> > > ...or with spaces between"
 - " spaces between arrows.\n```"
-- ">"
-- Blockquotes are very handy in
+- "> Blockquotes are very handy in"
 - very handy in email to emulate
 - email to emulate reply text.
 - ">"
 - This line is part of the same
 - part of the same quote.
 - Quote break.
-- ">"
-- This is a very long line that
+- "> This is a very long line that"
 - long line that will still be
 - will still be quoted properly
 - quoted properly when it wraps.
@@ -697,16 +694,13 @@ expression: chunks
 - wrap for everyone.
 - "Oh, you can *put* **Markdown**"
 - "**Markdown** into a blockquote."
-- ">"
-- Blockquotes can also be nested..
+- "> Blockquotes can also be nested"
 - " also be nested...\n>"
-- ">"
-- "...by using additional greater-"
+- "> ...by using additional greater"
 - greater-than signs right next to
 - " right next to each other...\n> >"
-- ">"
-- "...or with spaces between arrows"
-- " between arrows.\n\n------"
+- "> ...or with spaces between"
+- " spaces between arrows.\n\n------"
 - "# Inline HTML"
 - "```"
 - "<dl>\n  <dt>Definition list</dt>"

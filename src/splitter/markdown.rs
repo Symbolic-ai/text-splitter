@@ -63,7 +63,7 @@ where
     /// 4. [Unicode Sentence Boundaries](https://www.unicode.org/reports/tr29/#Sentence_Boundaries)
     /// 5. Soft line breaks (single newline) which isn't necessarily a new element in Markdown.
     /// 6. Inline elements such as: text nodes, emphasis, strong, strikethrough, link, image, table cells, inline code, footnote references, task list markers, and inline html.
-    /// 7. Sentences of prose in a paragraph or a list item. A chunk goes below a sentence only when the sentence does not fit.
+    /// 7. Sentences of prose in a paragraph, list item, block quote or footnote. A chunk goes below a sentence only when the sentence does not fit.
     /// 8. Block elements suce as: paragraphs, code blocks, footnote definitions, metadata. Also, a block quote or row/item within a table or list that can contain other "block" type elements, and a list or table that contains items.
     /// 9. Thematic breaks or horizontal rules.
     /// 10. Headings by level
@@ -172,8 +172,9 @@ where
                         range.start = range.start.min(start);
                     }
                 }
-            } else if !(matches!(event, Event::Start(Tag::Paragraph)) && prose.is_empty()) {
-                // A paragraph that opens a list item keeps the item start.
+            } else if !(opens_lead_container(&event) && prose.is_empty()) {
+                // A paragraph or a block quote that opens a list item, a block
+                // quote or a footnote definition keeps the outer start.
                 prose.flush(&mut ranges);
             }
 
@@ -202,11 +203,16 @@ where
                     containers.pop();
                 }
                 Event::Start(ref tag) if !is_inline_tag(tag) => {
-                    let is_prose = matches!(tag, Tag::Paragraph | Tag::Item);
-                    if is_prose {
+                    if matches!(
+                        tag,
+                        Tag::Paragraph
+                            | Tag::Item
+                            | Tag::BlockQuote(_)
+                            | Tag::FootnoteDefinition(_)
+                    ) {
                         prose.open(range.start);
                     }
-                    containers.push(is_prose);
+                    containers.push(matches!(tag, Tag::Paragraph | Tag::Item));
                 }
                 Event::End(tag) if !is_inline_tag_end(tag) => {
                     containers.pop();
@@ -235,6 +241,9 @@ struct ProsePiece {
     /// True when the visible bytes are the source bytes, so an offset in the
     /// piece maps to the source. A sentence never ends inside other pieces.
     exact: bool,
+    /// True inside a link, an image or an emphasis span. A sentence never ends
+    /// there: a chunk would cut the span in two and leave its syntax open.
+    in_span: bool,
 }
 
 /// The visible text of a run of prose, which is the input to sentence
@@ -242,9 +251,12 @@ struct ProsePiece {
 /// link destination is not the end of a sentence.
 #[derive(Debug, Default)]
 struct Prose {
-    /// Start of the paragraph or list item that holds the next run. The first
-    /// sentence starts there, so a list marker stays with its sentence.
+    /// Start of the paragraph, list item, block quote or footnote definition
+    /// that holds the next run. The first sentence starts there, so a list,
+    /// task, quote or footnote marker stays with its sentence.
     container_start: Option<usize>,
+    /// Number of links, images and emphasis spans that are open now.
+    span_depth: usize,
     /// Source range of the run, from its first to its last inline event.
     source: Option<Range<usize>>,
     visible: String,
@@ -276,12 +288,23 @@ impl Prose {
 
         let (visible, exact) = match event {
             Event::Text(content) => (content.as_ref(), text.get(range.clone()) == Some(content)),
-            Event::Code(content)
-            | Event::InlineHtml(content)
-            | Event::InlineMath(content)
-            | Event::FootnoteReference(content) => (content.as_ref(), false),
+            Event::Code(content) => (content.as_ref(), false),
+            // A footnote label, inline HTML or math is not prose. Its content
+            // could hide a sentence boundary next to it ("text.[^1] Next").
             // Markdown joins the lines of a paragraph with a space.
-            Event::SoftBreak | Event::HardBreak => (" ", false),
+            Event::InlineHtml(_)
+            | Event::InlineMath(_)
+            | Event::FootnoteReference(_)
+            | Event::SoftBreak
+            | Event::HardBreak => (" ", false),
+            Event::Start(_) => {
+                self.span_depth += 1;
+                return;
+            }
+            Event::End(_) => {
+                self.span_depth = self.span_depth.saturating_sub(1);
+                return;
+            }
             _ => return,
         };
         let start = self.visible.len();
@@ -290,6 +313,7 @@ impl Prose {
             visible: start..self.visible.len(),
             source: range,
             exact,
+            in_span: self.span_depth > 0,
         });
     }
 
@@ -320,6 +344,7 @@ impl Prose {
 
         self.visible.clear();
         self.pieces.clear();
+        self.span_depth = 0;
     }
 
     /// Map a sentence boundary in the visible text to the source text. A
@@ -329,7 +354,7 @@ impl Prose {
         let index = self
             .pieces
             .partition_point(|piece| piece.visible.end < offset);
-        let piece = self.pieces.get(index)?;
+        let piece = self.pieces.get(index).filter(|piece| !piece.in_span)?;
         if piece.visible.end == offset {
             Some(piece.source.end)
         } else if piece.exact && piece.visible.start < offset {
@@ -385,6 +410,22 @@ fn element_for_event(event: &Event<'_>) -> Option<Element> {
     }
 }
 
+/// True for a start event that opens a container whose first sentence keeps
+/// the container start (see `Prose::container_start`).
+fn opens_lead_container(event: &Event<'_>) -> bool {
+    matches!(
+        event,
+        Event::Start(Tag::Paragraph | Tag::BlockQuote(_) | Tag::FootnoteDefinition(_))
+    )
+}
+
+// The inline classification lives in four functions that must agree:
+// `element_for_event` (the level of each range), `is_inline_tag` and
+// `is_inline_tag_end` (spans inside a line of prose), and `is_inline` (the
+// events of a run of prose). Two differences are deliberate. `TableCell` is
+// an `Inline` level but not prose: a cell is not part of a sentence. A task
+// list marker is prose, so it stays with the first sentence of its item.
+
 /// True for the tags that stay inside a line of prose.
 fn is_inline_tag(tag: &Tag<'_>) -> bool {
     matches!(
@@ -422,7 +463,8 @@ fn is_inline(event: &Event<'_>) -> bool {
         | Event::InlineMath(_)
         | Event::FootnoteReference(_)
         | Event::SoftBreak
-        | Event::HardBreak => true,
+        | Event::HardBreak
+        | Event::TaskListMarker(_) => true,
         Event::Start(tag) => is_inline_tag(tag),
         Event::End(tag) => is_inline_tag_end(*tag),
         _ => false,
@@ -861,11 +903,62 @@ mod tests {
     }
 
     #[test]
-    fn code_block_has_no_sentences() {
-        let text = "```\nOne. Two.\n```";
+    fn code_block_lines_stay_separate_and_have_no_sentences() {
+        // In a list item, pulldown-cmark emits each code line as a text event.
+        let text = "- item\n\n  ```\n  One. Two.\n  Three.\n  ```";
         let ranges = MarkdownSplitter::new(10).parse(text);
+        let code_lines = ranges
+            .iter()
+            .filter(|(level, range)| *level == Element::Inline && range.start > 8)
+            .map(|(_, range)| &text[range.clone()])
+            .collect::<Vec<_>>();
 
-        assert!(ranges.iter().all(|(level, _)| *level != Element::Sentence));
+        assert_eq!(vec!["One. Two.\n", "Three.\n"], code_lines);
+        assert!(ranges
+            .iter()
+            .all(|(level, range)| *level != Element::Sentence || range.end <= 8));
+    }
+
+    fn sentences(text: &str) -> Vec<&str> {
+        let markdown = SemanticSplitRanges::new(MarkdownSplitter::new(10).parse(text));
+        markdown
+            .ranges_after_offset(0)
+            .filter(|(level, _)| *level == Element::Sentence)
+            .map(|(_, range)| &text[range])
+            .collect()
+    }
+
+    #[test]
+    fn sentence_never_ends_inside_a_link_image_or_emphasis() {
+        assert_eq!(
+            vec!["One. ", "[Here. Now](http://x) more. ", "Two."],
+            sentences("One. [Here. Now](http://x) more. Two.")
+        );
+        assert_eq!(
+            vec!["One. ", "![Figure 1. Overview](x) shows it. ", "Two."],
+            sentences("One. ![Figure 1. Overview](x) shows it. Two.")
+        );
+        assert_eq!(
+            vec!["One. ", "**Note. Next** words. ", "Two."],
+            sentences("One. **Note. Next** words. Two.")
+        );
+    }
+
+    #[test]
+    fn sentence_never_ends_inside_a_code_span() {
+        assert_eq!(
+            vec!["Run `a. B` now. ", "Two."],
+            sentences("Run `a. B` now. Two.")
+        );
+    }
+
+    #[test]
+    fn footnote_reference_and_inline_html_keep_the_sentence_boundary() {
+        assert_eq!(
+            vec!["One.[^1] ", "Two."],
+            sentences("One.[^1] Two.\n\n[^1]: Note")
+        );
+        assert_eq!(vec!["One.<br> ", "Two."], sentences("One.<br> Two."));
     }
 
     #[test]
@@ -895,7 +988,31 @@ mod tests {
         let text = "- First item text that goes on\n- Second";
         let chunks = MarkdownSplitter::new(24).chunks(text).collect::<Vec<_>>();
 
-        assert_eq!(Some(&"- First item text that"), chunks.first());
+        assert_eq!(vec!["- First item text that", "goes on\n- Second"], chunks);
+    }
+
+    #[test]
+    fn marker_stays_with_the_first_sentence() {
+        for (text, first) in [
+            (
+                "1. First sentence here. Second one.",
+                "1. First sentence here. ",
+            ),
+            (
+                "- First sentence here. Second one.",
+                "- First sentence here. ",
+            ),
+            (
+                "- [ ] First sentence here. Second one.",
+                "- [ ] First sentence here. ",
+            ),
+            (
+                "> First sentence here. Second one.",
+                "> First sentence here. ",
+            ),
+        ] {
+            assert_eq!(vec![first, "Second one."], sentences(text), "{text}");
+        }
     }
 
     #[test]
@@ -920,10 +1037,10 @@ mod tests {
             vec![
                 (Element::Block, 0..42),
                 (Element::Block, 0..22),
-                (Element::Inline, 2..5),
+                (Element::Inline, 0..5),
                 (Element::Inline, 6..21),
                 (Element::Block, 22..42),
-                (Element::Inline, 24..27),
+                (Element::Inline, 22..27),
                 (Element::Inline, 28..42),
             ],
             markdown.ranges_after_offset(0).collect::<Vec<_>>()
@@ -1122,8 +1239,8 @@ mod tests {
         assert_eq!(
             vec![
                 (Element::Block, 0..18),
-                (Element::Block, 10..18),
-                (Element::Inline, 10..18)
+                (Element::Inline, 0..18),
+                (Element::Block, 10..18)
             ],
             markdown.ranges_after_offset(0).collect::<Vec<_>>()
         );
@@ -1148,8 +1265,8 @@ mod tests {
         assert_eq!(
             vec![
                 (Element::Block, 0..7),
-                (Element::Block, 2..7),
-                (Element::Inline, 2..7)
+                (Element::Inline, 0..7),
+                (Element::Block, 2..7)
             ],
             markdown.ranges_after_offset(0).collect::<Vec<_>>()
         );

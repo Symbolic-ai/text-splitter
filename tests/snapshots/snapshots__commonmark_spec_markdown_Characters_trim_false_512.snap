@@ -1,6 +1,5 @@
 ---
 source: tests/snapshots.rs
-assertion_line: 242
 expression: chunks
 ---
 - "---\ntitle: CommonMark Spec\nauthor: John MacFarlane\nversion: '0.31.2'\ndate: '2024-01-28'\nlicense: '[CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)'\n...\n\n"

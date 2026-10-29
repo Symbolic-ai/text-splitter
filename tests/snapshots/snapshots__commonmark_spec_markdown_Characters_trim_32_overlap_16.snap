@@ -1,6 +1,5 @@
 ---
 source: tests/snapshots.rs
-assertion_line: 332
 expression: chunks
 ---
 - "---"
@@ -65,8 +64,7 @@ expression: chunks
 - "are often easier to write, is"
 - "to write, is its readability."
 - "As Gruber writes:"
-- ">"
-- The overriding design goal for
+- "> The overriding design goal for"
 - "design goal for Markdown's"
 - "for Markdown's formatting syntax"
 - " syntax is\n>"
@@ -3006,8 +3004,7 @@ expression: chunks
 - "from John Gruber's original"
 - original Markdown syntax
 - "specification, which says:"
-- ">"
-- The only restrictions are that
+- "> The only restrictions are that"
 - are that block-level HTML
 - "block-level HTML elements —\n>"
 - "e.g. `<div>`, `<table>`, `<pre>`"
@@ -3572,8 +3569,7 @@ expression: chunks
 - container blocks recursively.
 - The general
 - "form of the definition is:"
-- ">"
-- "If X is a sequence of blocks,"
+- "> If X is a sequence of blocks,"
 - " of blocks, then the result of\n>"
 - transforming X in such-and-such
 - in such-and-such a way is a
@@ -5815,8 +5811,7 @@ expression: chunks
 - "](https://daringfireball.net/"
 - "/projects/markdown/syntax#em)"
 - "says:"
-- ">"
-- "Markdown treats asterisks (`*`"
+- "> Markdown treats asterisks (`*`"
 - "`*`) and underscores (`_`"
 - "`_`) as indicators of\n>"
 - "> emphasis."
