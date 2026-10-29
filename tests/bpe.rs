@@ -228,3 +228,54 @@ fn symbolic_markdown_fixture_splits_cleanly_with_bpe() {
         "reconstructed markdown should match input"
     );
 }
+
+#[cfg(feature = "markdown")]
+#[test]
+fn markdown_chunk_ends_at_a_sentence_when_the_next_sentence_does_not_fit() {
+    // The first two sentences are 43 cl100k tokens and the last is 9. Smart
+    // punctuation split the text at each apostrophe, so the first chunk ended
+    // inside "isn't".
+    let text = "It has become a space-based myth. The Great Wall of China, frequently \
+                billed as the only man-made object visible from space, generally isn't, \
+                at least to the unaided eye in low Earth orbit. It certainly isn't \
+                visible from the Moon.";
+
+    for tokenizer in [cl100k_base(), o200k_base()] {
+        for capacity in 40..=50 {
+            let splitter = MarkdownSplitter::new(ChunkConfig::new(capacity).with_sizer(tokenizer));
+            let chunks = splitter.chunks(text).collect::<Vec<_>>();
+
+            assert!(
+                chunks
+                    .iter()
+                    .all(|chunk| chunk.ends_with('.') && !chunk.starts_with(['t', 's', '\''])),
+                "capacity {capacity}: {chunks:?}"
+            );
+            assert!(
+                chunks.last().is_some_and(
+                    |chunk| chunk.ends_with("It certainly isn't visible from the Moon.")
+                ),
+                "capacity {capacity}: {chunks:?}"
+            );
+        }
+    }
+}
+
+#[cfg(feature = "markdown")]
+#[test]
+fn markdown_sentence_chunks_for_the_sym_7223_text() {
+    let text = "It has become a space-based myth. The Great Wall of China, frequently billed as \
+                the only man-made object visible from space, generally isn't, at least to the \
+                unaided eye in low Earth orbit. It certainly isn't visible from the Moon.";
+    let splitter = MarkdownSplitter::new(ChunkConfig::new(50).with_sizer(cl100k_base()));
+
+    assert_eq!(
+        vec![
+            "It has become a space-based myth. The Great Wall of China, frequently billed as \
+             the only man-made object visible from space, generally isn't, at least to the \
+             unaided eye in low Earth orbit.",
+            "It certainly isn't visible from the Moon.",
+        ],
+        splitter.chunks(text).collect::<Vec<_>>()
+    );
+}
