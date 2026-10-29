@@ -159,8 +159,14 @@ where
         let mut code_blocks = 0_usize;
         // Container tags that are open now. Sentences are found only in prose.
         let mut containers: Vec<bool> = Vec::new();
+        // The outermost inline element of the current line of prose, and the
+        // last visible character in it.
+        let mut word = Word::default();
 
-        for (event, mut range) in Parser::new_ext(text, Options::all()).into_offset_iter() {
+        let events = Parser::new_ext(text, Options::all())
+            .into_offset_iter()
+            .collect::<Vec<_>>();
+        for (index, (event, mut range)) in events.iter().cloned().enumerate() {
             if is_inline(&event) {
                 if containers.last().copied().unwrap_or(false) {
                     let lead = prose.lead_start();
@@ -188,9 +194,16 @@ where
                 Event::Text(_) => {
                     if let Some(index) = last_text.filter(|_| code_blocks == 0) {
                         ranges[index].1.end = range.end;
+                        word.enter(&event);
+                        continue;
+                    }
+                    if code_blocks == 0 && word.joins(&ranges, text, &events[index..], &range) {
+                        last_text = word.outer;
+                        word.extend(&mut ranges, &event, range.end);
                         continue;
                     }
                     last_text = Some(ranges.len());
+                    word.start(&ranges, &event);
                     ranges.push((Element::Inline, range));
                     continue;
                 }
@@ -221,6 +234,22 @@ where
             }
             last_text = None;
 
+            // An inline element directly next to a word joins the outermost
+            // element before it, so a chunk does not end inside the word
+            // ("`foo`s", "foo*bar*").
+            match event {
+                Event::Code(_) | Event::InlineMath(_) | Event::Start(_) if is_inline(&event) => {
+                    if word.joins(&ranges, text, &events[index..], &range) {
+                        word.extend(&mut ranges, &event, range.end);
+                        continue;
+                    }
+                    word.start(&ranges, &event);
+                }
+                Event::End(tag) if is_inline_tag_end(tag) => word.close(),
+                _ if is_inline(&event) => word.last = None,
+                _ => word = Word::default(),
+            }
+
             if let Some(level) = element_for_event(&event) {
                 ranges.push((level, range));
             }
@@ -229,6 +258,99 @@ where
 
         ranges
     }
+}
+
+/// The inline elements of the current line of prose, to find the elements
+/// that are parts of one word.
+#[derive(Debug, Default)]
+struct Word {
+    /// Index in the ranges of the last inline element that is not inside a
+    /// span (emphasis, link, ...).
+    outer: Option<usize>,
+    /// True when the last event of the outer element is a text event.
+    outer_ends_in_text: bool,
+    /// Number of inline spans that are open now.
+    depth: usize,
+    /// Last visible character of the line, when the last inline event shows
+    /// text.
+    last: Option<char>,
+}
+
+impl Word {
+    /// True when the inline event at the start of `events` is a part of the
+    /// same word as the outer element: it begins directly after the element,
+    /// the characters on both sides of the boundary are word characters, and
+    /// plain text is on one side ("`foo`s", "foo*bar*"). Two links or spans
+    /// next to each other stay separate elements.
+    fn joins(
+        &self,
+        ranges: &[(Element, Range<usize>)],
+        text: &str,
+        events: &[(Event<'_>, Range<usize>)],
+        range: &Range<usize>,
+    ) -> bool {
+        let Some(outer) = self.outer.filter(|_| self.depth == 0) else {
+            return false;
+        };
+        (self.outer_ends_in_text || matches!(events.first(), Some((Event::Text(_), _))))
+            && self.last.is_some_and(is_word_char)
+            && first_visible_char(events).is_some_and(is_word_char)
+            && text
+                .get(ranges[outer].1.end..range.start)
+                .is_some_and(str::is_empty)
+    }
+
+    /// Extend the outer element to the end of the event that joins it.
+    fn extend(&mut self, ranges: &mut [(Element, Range<usize>)], event: &Event<'_>, end: usize) {
+        if let Some(outer) = self.outer {
+            ranges[outer].1.end = ranges[outer].1.end.max(end);
+        }
+        self.enter(event);
+    }
+
+    /// Record the event as a new element. Its range is the next range.
+    fn start(&mut self, ranges: &[(Element, Range<usize>)], event: &Event<'_>) {
+        if self.depth == 0 {
+            self.outer = Some(ranges.len());
+        }
+        self.enter(event);
+    }
+
+    fn enter(&mut self, event: &Event<'_>) {
+        if self.depth == 0 {
+            self.outer_ends_in_text = matches!(event, Event::Text(_));
+        }
+        match event {
+            Event::Text(content) | Event::Code(content) | Event::InlineMath(content) => {
+                if let Some(last) = content.chars().next_back() {
+                    self.last = Some(last);
+                }
+            }
+            Event::Start(_) => self.depth += 1,
+            _ => self.last = None,
+        }
+    }
+
+    fn close(&mut self) {
+        self.depth = self.depth.saturating_sub(1);
+    }
+}
+
+/// A letter, a digit or an apostrophe.
+fn is_word_char(c: char) -> bool {
+    c.is_alphanumeric() || c == '\'' || c == '\u{2019}'
+}
+
+/// The first visible character of the inline element at the start of
+/// `events`.
+fn first_visible_char(events: &[(Event<'_>, Range<usize>)]) -> Option<char> {
+    events.iter().find_map(|(event, _)| match event {
+        Event::Text(content) | Event::Code(content) | Event::InlineMath(content) => {
+            Some(content.chars().next())
+        }
+        Event::Start(tag) if is_inline_tag(tag) => None,
+        _ => Some(None),
+    })?
 }
 
 /// One inline event of a run of prose.
@@ -1013,6 +1135,63 @@ mod tests {
         ] {
             assert_eq!(vec![first, "Second one."], sentences(text), "{text}");
         }
+    }
+
+    #[test]
+    fn ordered_list_marker_stays_with_the_first_words() {
+        let text = "1. Actual numbers don't matter, just that it's a number";
+        let chunks = MarkdownSplitter::new(32).chunks(text).collect::<Vec<_>>();
+
+        assert_eq!(
+            vec!["1. Actual numbers don't matter,", "just that it's a number"],
+            chunks
+        );
+    }
+
+    fn inline_sections(text: &str) -> Vec<&str> {
+        SemanticSplitRanges::new(MarkdownSplitter::new(10).parse(text))
+            .semantic_chunks(0, text, Element::Inline)
+            .map(|(_, section)| section)
+            .collect()
+    }
+
+    #[test]
+    fn inline_element_next_to_a_word_is_not_a_boundary() {
+        for (text, expected) in [
+            ("Call `foo`s now", vec!["Call ", "`foo`s now"]),
+            ("Call *foo*s now", vec!["Call ", "*foo*s now"]),
+            ("Call [foo](u)s now", vec!["Call ", "[foo](u)s now"]),
+            ("Call foo`bar` now", vec!["Call foo`bar`", " now"]),
+            ("Call foo*bar* now", vec!["Call foo*bar*", " now"]),
+            ("Call `foo`'s now", vec!["Call ", "`foo`'s now"]),
+        ] {
+            assert_eq!(expected, inline_sections(text), "{text}");
+        }
+    }
+
+    #[test]
+    fn inline_element_next_to_a_space_or_a_span_is_still_a_boundary() {
+        for (text, expected) in [
+            ("a `foo` b", vec!["a ", "`foo`", " b"]),
+            ("a *foo* b", vec!["a ", "*foo*", " b"]),
+            ("text<br>more", vec!["text", "<br>", "more"]),
+            ("Call `foo`, now", vec!["Call ", "`foo`", ", now"]),
+            ("[a](u)[b](v) c", vec!["[a](u)", "[b](v)", " c"]),
+            ("**a**_b_ c", vec!["**a**", "_b_", " c"]),
+        ] {
+            assert_eq!(expected, inline_sections(text), "{text}");
+        }
+    }
+
+    #[test]
+    fn chunk_does_not_end_between_a_code_span_and_its_suffix() {
+        let text = "Some words before `foo`s and some words after it.";
+        let chunks = MarkdownSplitter::new(24).chunks(text).collect::<Vec<_>>();
+
+        assert!(
+            chunks.iter().all(|chunk| !chunk.starts_with('s')),
+            "{chunks:?}"
+        );
     }
 
     #[test]

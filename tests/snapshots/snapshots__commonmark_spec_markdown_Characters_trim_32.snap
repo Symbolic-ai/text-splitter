@@ -85,9 +85,9 @@ expression: chunks
 - $ mv *.sh ~/tmp
 - ".................\n+"
 - List item continued with a third
-- "paragraph.\n\n2."
-- List item two continued with an
-- "open block.\n+\n--"
+- paragraph.
+- 2. List item two continued with
+- "an open block.\n+\n--"
 - This paragraph is part of the
 - "preceding list item.\n\na."
 - This list is nested and does not
@@ -108,17 +108,17 @@ expression: chunks
 - $ ls *.sh
 - $ mv *.sh ~/tmp
 - List item continued with a third
-- "paragraph.\n\n2."
-- List item two continued with an
-- open block.
+- paragraph.
+- 2.  List item two continued with
+- an open block.
 - This paragraph is part of the
-- "preceding list item.\n\n    1."
-- This list is nested and does not
-- require explicit item
+- preceding list item.
+- 1. This list is nested and does
+- not require explicit item
 - continuation.
 - This paragraph is part of the
-- "preceding list item.\n\n    2."
-- List item b.
+- preceding list item.
+- 2. List item b.
 - This paragraph belongs to item
 - "two of the outer list.\n```"
 - "The AsciiDoc version is,"
@@ -142,9 +142,8 @@ expression: chunks
 - unambiguously.
 - Here are some examples of
 - "questions it does not answer:"
-- "1."
-- How much indentation is needed
-- for a sublist?
+- 1.  How much indentation is
+- needed for a sublist?
 - The spec says that
 - continuation paragraphs need to
 - "be indented four spaces, but is"
@@ -166,9 +165,8 @@ expression: chunks
 - article.gmane.org/
 - gmane.text.markdown.general/1997
 - ).)
-- "2."
-- Is a blank line needed before a
-- block quote or heading?
+- 2.  Is a blank line needed
+- before a block quote or heading?
 - Most implementations do not
 - require the blank line.
 - "However,"
@@ -188,9 +186,8 @@ expression: chunks
 - article.gmane.org/
 - gmane.text.markdown.general/2146
 - ).)
-- "3."
-- Is a blank line needed before an
-- indented code block?
+- 3.  Is a blank line needed
+- before an indented code block?
 - "(`Markdown.pl`"
 - "requires it, but this is not"
 - mentioned in the
@@ -199,8 +196,7 @@ expression: chunks
 - it.)
 - "``` markdown\n    paragraph"
 - "    code?\n    ```"
-- "4."
-- What is the exact rule for
+- 4.  What is the exact rule for
 - determining when list items get
 - "wrapped in `<p>` tags?"
 - "Can a list be partially \"loose\""
@@ -220,24 +216,23 @@ expression: chunks
 - article.gmane.org/
 - gmane.text.markdown.general/2554
 - ).)
-- "5."
-- Can list markers be indented?
+- 5.  Can list markers be indented
+- "?"
 - Can ordered list markers be
 - right-aligned?
 - "``` markdown\n     8. item 1"
 - " 9. item 2\n    10. item 2a"
 - "```"
-- "6."
-- Is this one list with a thematic
-- "break in its second item,"
+- 6.  Is this one list with a
+- thematic break in its second
+- "item,"
 - or two lists separated by a
 - thematic break?
 - "``` markdown\n    * a"
 - "* * * * *\n    * b\n    ```"
-- "7."
-- When list markers change from
-- "numbers to bullets, do we have"
-- two lists or one?
+- 7.  When list markers change
+- "from numbers to bullets, do we"
+- "have\n    two lists or one?"
 - (The Markdown syntax description
 - "suggests two,"
 - but the perl scripts and many
@@ -246,9 +241,8 @@ expression: chunks
 - "``` markdown\n    1. fee"
 - "2. fie\n    -  foe\n    -  fum"
 - "```"
-- "8."
-- What are the precedence rules
-- for the markers of inline
+- 8.  What are the precedence
+- rules for the markers of inline
 - structure?
 - "For example, is the following a"
 - "valid link, or does the code"
@@ -257,18 +251,16 @@ expression: chunks
 - "[a backtick (`)](/url) and ["
 - "another backtick (`)](/url)."
 - "```"
-- "9."
-- What are the precedence rules
-- for markers of emphasis and
-- "strong\n    emphasis?"
+- 9.  What are the precedence
+- rules for markers of emphasis
+- "and strong\n    emphasis?"
 - "For example, how should the"
 - following be parsed?
 - "``` markdown\n    *foo *bar* baz*"
 - "```"
-- "10."
-- What are the precedence rules
-- between block-level and inline-
-- "level\n    structure?"
+- 10. What are the precedence
+- rules between block-level and
+- "inline-level\n    structure?"
 - "For example, how should the"
 - following be parsed?
 - "``` markdown"
@@ -276,9 +268,8 @@ expression: chunks
 - a hyphen like this
 - "- and it can screw things up`"
 - "```"
-- "11."
-- Can list items include section
-- headings?
+- 11. Can list items include
+- section headings?
 - "(`Markdown.pl` does not"
 - "allow this, but does allow"
 - blockquotes to include headings.
@@ -288,15 +279,13 @@ expression: chunks
 - 12. Can list items be empty?
 - "    ``` markdown\n    * a\n    *"
 - "* b\n    ```"
-- "13."
-- Can link references be defined
-- inside block quotes or list
-- items?
+- 13. Can link references be
+- defined inside block quotes or
+- list items?
 - "``` markdown"
 - "> Blockquote [foo].\n    >"
 - "> [foo]: /url\n    ```"
-- "14."
-- If there are multiple
+- 14. If there are multiple
 - definitions for the same
 - "reference, which takes"
 - precedence?
@@ -3342,9 +3331,8 @@ expression: chunks
 - then it is also assigned a start
 - "number, based on the ordered"
 - "list marker.\n\n    Exceptions:"
-- "1."
-- "When the first list item in a ["
-- "list] interrupts"
+- 1. When the first list item in a
+- "[list] interrupts"
 - "a paragraph---that is, when it"
 - starts on a line that would
 - "otherwise count as [paragraph"
@@ -3354,9 +3342,8 @@ expression: chunks
 - ", and (b) if"
 - "the list item is ordered, the"
 - start number must be 1.
-- "2."
-- "If any line is a [thematic break"
-- "][thematic breaks] then"
+- "2. If any line is a [thematic"
+- "break][thematic breaks] then"
 - that line is not a list item.
 - "For example, let *Ls*"
 - be the lines
@@ -3560,10 +3547,8 @@ expression: chunks
 - example
 - "-1. not ok\n.\n<p>-1. not ok</p>"
 - "````````````````````````````````"
-- "2."
-- "**"
-- Item starting with indented code
-- ".**"
+- 2.  **Item starting with
+- indented code.**
 - If a sequence of lines *Ls*
 - constitute a sequence of blocks
 - "*Bs*"
@@ -3694,10 +3679,8 @@ expression: chunks
 - "<p>foo</p>\n<p>bar</p>\n</li>"
 - "</ul>"
 - "````````````````````````````````"
-- "3."
-- "**"
-- Item starting with a blank line.
-- "**"
+- 3.  **Item starting with a blank
+- line.**
 - If a sequence of lines *Ls*
 - "starting with a single [blank"
 - "line] constitute a (possibly"
@@ -3994,38 +3977,32 @@ expression: chunks
 - "### Motivation"
 - "John Gruber's Markdown spec says"
 - "the following about list items:"
-- "1."
-- "\"List markers typically start at"
-- "the left margin, but may be"
+- "1. \"List markers typically start"
+- "at the left margin, but may be"
 - indented
 - by up to three spaces.
 - List markers must be followed by
 - "one or more\n   spaces or a tab.\""
-- "2."
-- "\"To make lists look nice, you"
+- "2. \"To make lists look nice, you"
 - can wrap items with hanging
 - indents....
 - "But if you don't want to, you"
 - "don't have to.\""
-- "3."
-- "\"List items may consist of"
+- "3. \"List items may consist of"
 - multiple paragraphs.
 - Each subsequent
 - paragraph in a list item must be
 - indented by either 4 spaces or
 - "one\n   tab.\""
-- "4."
-- "\"It looks nice if you indent"
+- "4. \"It looks nice if you indent"
 - every line of the subsequent
 - "paragraphs,"
 - "but here again, Markdown will"
 - "allow you to be lazy.\""
-- "5."
-- "\"To put a blockquote within a"
+- "5. \"To put a blockquote within a"
 - "list item, the blockquote's `>`"
 - "delimiters need to be indented.\""
-- "6."
-- "\"To put a code block within a"
+- "6. \"To put a code block within a"
 - "list item, the code block needs"
 - to be
 - indented twice — 8 spaces or two
@@ -4086,8 +4063,9 @@ expression: chunks
 - space
 - "rule, while discount, redcarpet,"
 - "marked, PHP Markdown, and others"
-- "followed `Markdown.pl`"
-- "'s behavior more closely.)"
+- followed
+- "`Markdown.pl`'s behavior more"
+- closely.)
 - "Unfortunately, given the"
 - divergences between
 - "implementations, there"
@@ -4317,8 +4295,9 @@ expression: chunks
 - "line:"
 - "``` markdown"
 - The number of windows in my
-- "house is\n14."
-- "The number of doors is 6.\n```"
+- house is
+- 14.  The number of doors is 6.
+- "```"
 - "Oddly, though, `Markdown.pl`"
 - "*does* allow a blockquote to"
 - "interrupt a paragraph, even"
@@ -4390,19 +4369,20 @@ expression: chunks
 - "````````````````````````````````"
 - example
 - The number of windows in my
-- "house is\n14."
-- "The number of doors is 6.\n."
+- house is
+- "14.  The number of doors is 6.\n."
 - "<p>The number of windows in my"
-- "house is\n14."
-- The number of doors is 6.</p>
+- house is
+- 14.  The number of doors is 6.</
+- p>
 - "````````````````````````````````"
 - We may still get an unintended
 - result in cases like
 - "````````````````````````````````"
 - example
 - The number of windows in my
-- "house is\n1."
-- "The number of doors is 6.\n."
+- house is
+- "1.  The number of doors is 6.\n."
 - "<p>The number of windows in my"
 - "house is</p>\n<ol>"
 - "<li>The number of doors is 6.</"
@@ -5049,10 +5029,9 @@ expression: chunks
 - "delimiter run]"
 - "followed by a [Unicode"
 - "punctuation character]."
-- "9."
-- Emphasis begins with a delimiter
-- "that [can open emphasis] and"
-- ends
+- 9.  Emphasis begins with a
+- "delimiter that [can open"
+- "emphasis] and ends"
 - "with a delimiter that [can close"
 - "emphasis], and that uses the"
 - "same\n    character (`_` or `*`"
@@ -5070,9 +5049,8 @@ expression: chunks
 - must not be a multiple of 3
 - unless both lengths are
 - multiples of 3.
-- "10."
-- Strong emphasis begins with a
-- delimiter that
+- 10. Strong emphasis begins with
+- a delimiter that
 - "[can open strong emphasis] and"
 - ends with a delimiter that
 - "[can close strong emphasis], and"
@@ -5111,9 +5089,8 @@ expression: chunks
 - "parsings,"
 - the following principles resolve
 - "ambiguity:"
-- "13."
-- The number of nestings should be
-- minimized.
+- 13. The number of nestings
+- should be minimized.
 - "Thus, for example,"
 - an interpretation
 - "`<strong>...</strong>`"
@@ -5123,9 +5100,9 @@ expression: chunks
 - "`<em><strong>...</strong></em>`"
 - " is always\n    preferred to"
 - "`<strong><em>...</em></strong>`."
-- "15."
-- When two potential emphasis or
-- "strong emphasis spans overlap,"
+- 15. When two potential emphasis
+- or strong emphasis spans overlap
+- ","
 - so that the second begins before
 - the first ends and ends after
 - "the first ends, the first takes"
@@ -5134,8 +5111,7 @@ expression: chunks
 - "`*foo _bar* baz_` is parsed as"
 - "`<em>foo _bar</em> baz_` rather"
 - "than `*foo <em>bar* baz</em>`."
-- "16."
-- When there are two potential
+- 16. When there are two potential
 - emphasis or strong emphasis
 - spans
 - "with the same closing delimiter,"
@@ -5147,9 +5123,8 @@ expression: chunks
 - rather than
 - "`<strong>foo **bar baz</strong>`"
 - "."
-- "17."
-- "Inline code spans, links, images"
-- ", and HTML tags group more"
+- "17. Inline code spans, links,"
+- "images, and HTML tags group more"
 - "tightly\n    than emphasis."
 - "So, when there is a choice"
 - between an interpretation
@@ -6463,9 +6438,8 @@ expression: chunks
 - quote type for the enclosing
 - title---to write titles
 - "containing\ndouble quotes."
-- "`Markdown.pl`"
-- "'s handling of titles has a"
-- number
+- "`Markdown.pl`'s handling of"
+- titles has a number
 - of other strange features.
 - "For example, it allows single-"
 - quoted
@@ -7313,9 +7287,9 @@ expression: chunks
 - "</a></p>"
 - "````````````````````````````````"
 - "## Autolinks"
-- "[Autolink](@)"
-- s are absolute URIs and email
-- "addresses inside\n`<` and `>`."
+- "[Autolink](@)s are absolute URIs"
+- "and email addresses inside\n`<`"
+- "and `>`."
 - "They are parsed as links, with"
 - the URL or email address
 - as the link label.
@@ -7905,8 +7879,7 @@ expression: chunks
 - implementations.
 - "## Overview"
 - "Parsing has two phases:"
-- "1."
-- "In the first phase, lines of"
+- "1. In the first phase, lines of"
 - input are consumed and the block
 - structure of the document---its
 - "division into paragraphs, block"
@@ -7918,8 +7891,7 @@ expression: chunks
 - Link reference definitions are
 - parsed and a
 - map of links is constructed.
-- "2."
-- "In the second phase, the raw"
+- "2. In the second phase, the raw"
 - text contents of paragraphs and
 - headings
 - are parsed into sequences of
@@ -7970,16 +7942,13 @@ expression: chunks
 - altered
 - in one or more of the following
 - "ways:"
-- "1."
-- One or more open blocks may be
-- closed.
-- "2."
-- One or more new blocks may be
+- 1. One or more open blocks may
+- be closed.
+- 2. One or more new blocks may be
 - created as children of the
 - last open block.
-- "3."
-- Text may be added to the last (
-- deepest) open block remaining
+- 3. Text may be added to the last
+- (deepest) open block remaining
 - on the tree.
 - Once a line has been
 - incorporated into the tree in
@@ -7988,8 +7957,7 @@ expression: chunks
 - can be read in a stream.
 - "For each line, we follow this"
 - "procedure:"
-- "1."
-- First we iterate through the
+- 1. First we iterate through the
 - "open blocks, starting with the"
 - "root document, and descending"
 - through last children down to
@@ -8006,8 +7974,7 @@ expression: chunks
 - But we cannot close unmatched
 - "blocks yet, because we may have"
 - "a\n[lazy continuation line]."
-- "2."
-- "Next, after consuming the"
+- "2.  Next, after consuming the"
 - continuation markers for
 - existing
 - "blocks, we look for new block"
@@ -8019,8 +7986,7 @@ expression: chunks
 - in step 1 before creating the
 - new block as a child of the last
 - matched container block.
-- "3."
-- "Finally, we look at the"
+- "3.  Finally, we look at the"
 - remainder of the line (after
 - "block\nmarkers like `>`"
 - ", list markers, and indentation"
